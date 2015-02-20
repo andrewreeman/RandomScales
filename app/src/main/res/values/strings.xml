@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Random_Scales</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="Notes">
+        <item >C</item>
+        <item >C#</item>
+        <item >D</item>
+        <item >Eb</item>
+        <item >E</item>
+        <item >F</item>
+        <item >F#</item>
+        <item >G</item>
+        <item >Ab</item>
+        <item >A</item>
+        <item >Bb</item>
+        <item >B</item>
+    </string-array>
+    <string name="scale">Scale:</string>
+    <string name="scaleGenButton">Generate random scale</string>
+    <string-array name="Scales">
+        <item>Modal</item>
+        <item >Major</item>
+        <item >Minor</item>
+        <item >Major Pentatonic</item>
+        <item >Minor Pentatonic</item>
+        <item >Blues</item>
+        <item >Chromatic</item>
+        <item >Persian</item>
+    </string-array>
+    <string-array name="Modes">
+        <item >Dorian</item>
+        <item >Phrygian</item>
+        <item >Lydian</item>
+        <item >Mixolydian</item>
+        <item >Locrian</item>
+    </string-array>
+    <string name="arpeggio">Arpeggio: </string>
+    <string name="arpGenButton">Generate random arpeggio</string>
+    <string-array name="arpeggios">
+        <item >Major</item>
+        <item >Minor</item>
+        <item >Diminished</item>
+        <item >Augmented</item>
+        <item >Dominant 7th</item>
+        <item >Major 7th</item>
+        <item >Minor 7th</item>
+        <item >Diminished 7th</item>
+    </string-array>
+
+</resources>
