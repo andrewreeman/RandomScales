@@ -26,9 +26,17 @@
         <item >Minor</item>
         <item >Major Pentatonic</item>
         <item >Minor Pentatonic</item>
-        <item >Blues</item>
+        <item >Minor Blues</item>
         <item >Chromatic</item>
         <item >Persian</item>
+        <item >Whole-Half Diminished</item>
+        <item >Half-Whole Diminished</item>
+        <item >Whole-Tone</item>
+        <item >Dominant Bebop</item>
+        <item >Minor Bebop</item>
+        <item >Major Bebop</item>
+        <item >Altered</item>
+        <item >Major Blues</item>
     </string-array>
     <string-array name="Modes">
         <item >Dorian</item>
