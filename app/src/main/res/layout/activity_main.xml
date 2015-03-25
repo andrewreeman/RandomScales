@@ -11,29 +11,28 @@
         android:layout_height="wrap_content"
         android:text="Random scale"
         android:id="@+id/randScale"
+        android:onClick="generateScale"
+        android:layout_alignTop="@+id/randArp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="83dp"
-        android:onClick="generateScale" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Random Arpeggio"
         android:id="@+id/randArp"
-        android:layout_alignBottom="@+id/randScale"
-        android:layout_toRightOf="@+id/randScale"
-        android:layout_toEndOf="@+id/randScale"
-        android:onClick="generateArpeggio" />
+        android:onClick="generateArpeggio"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/randResult"
-        android:layout_below="@+id/randScale"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="" />
+        android:text=""
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/randScale" />
 
 </RelativeLayout>
