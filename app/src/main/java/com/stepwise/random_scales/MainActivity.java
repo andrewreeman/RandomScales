@@ -1,7 +1,9 @@
 package com.stepwise.random_scales;
 
+import android.content.Intent;
 import android.content.res.Resources;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,8 +12,8 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-
-public class MainActivity extends ActionBarActivity {
+//Not ActionBarActivity ...
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,13 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        switch(id){
+            case R.id.presets:
+                startChangePreset();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+       }
     }
 
     public void generateScale(View view){
@@ -70,5 +72,10 @@ public class MainActivity extends ActionBarActivity {
 
         textView.setText(notes[note] + " " + scales[scale]);
 
+    }
+
+    public void startChangePreset(){
+        Intent intent = new Intent(this, Presets.class);
+        startActivity(intent);
     }
 }

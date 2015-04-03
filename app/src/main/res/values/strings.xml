@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Random_Scales</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Random Scales</string>
     <string-array name="Notes">
         <item >C</item>
         <item >C#</item>
@@ -57,5 +55,9 @@
         <item >Minor 7th</item>
         <item >Diminished 7th</item>
     </string-array>
+    <string name="title_activity_presets">Presets</string>
+    <string name="presets">Presets</string>
+    <string name="action_settings">Settings</string>
+
 
 </resources>
