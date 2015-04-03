@@ -15,6 +15,8 @@ import java.util.Random;
 //Not ActionBarActivity ...
 public class MainActivity extends Activity {
 
+    String m_SelectedString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,6 @@ public class MainActivity extends Activity {
     }
 
     public void generateScale(View view){
-        TextView textView = (TextView)findViewById(R.id.randResult);
         Resources res = getResources();
         String[] notes = res.getStringArray(R.array.Notes);
         Random randGen = new Random();
@@ -58,24 +59,32 @@ public class MainActivity extends Activity {
             int mode = randGen.nextInt(modes.length);
             outScale = modes[mode];
         }
-        textView.setText(notes[note] + " " + outScale);
+        m_SelectedString = notes[note] + " " + outScale;
+        setText(m_SelectedString);
     }
 
     public void generateArpeggio(View view){
-        TextView textView = (TextView)findViewById(R.id.randResult);
+
         Resources res = getResources();
         String[] notes = res.getStringArray(R.array.Notes);
         Random randGen = new Random();
         int note = randGen.nextInt(notes.length);
-        String[] scales = res.getStringArray(R.array.arpeggios);
-        int scale = randGen.nextInt(scales.length);
+        String[] arpeggios = res.getStringArray(R.array.arpeggios);
+        int arpeggio = randGen.nextInt(arpeggios.length);
 
-        textView.setText(notes[note] + " " + scales[scale]);
-
+        m_SelectedString = notes[note] + " " + arpeggios[arpeggio];
+        setText(m_SelectedString);
     }
+
+
 
     public void startChangePreset(){
         Intent intent = new Intent(this, Presets.class);
         startActivity(intent);
+    }
+
+    private void setText(String text){
+        TextView textView = (TextView)findViewById(R.id.randResult);
+        textView.setText(m_SelectedString);
     }
 }

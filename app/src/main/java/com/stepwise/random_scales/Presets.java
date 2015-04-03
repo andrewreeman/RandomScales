@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 
 public class Presets extends Activity {
@@ -13,6 +15,15 @@ public class Presets extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presets);
+    }
+
+    protected void onStart(){
+        super.onStart();
+/*      Dynamic creation of buttons.
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.presetFrame);
+        Button button = new Button(this);
+        button.setText("This is a test");
+        frameLayout.addView(button); */
     }
 
 
