@@ -10,8 +10,24 @@ public class SelectableExercises_Data {
     private ArrayList<Exercise> Scales;
     private ArrayList<Exercise> Arpeggios;
 
-    public void AddScale(Exercise scale){ Scales.add(scale); }
-    public void AddArpeggio(Exercise arpeggio){ Arpeggios.add(arpeggio);}
+    public SelectableExercises_Data(){
+        Scales = new ArrayList<Exercise>();
+        Arpeggios = new ArrayList<Exercise>();
+    }
+
+    public void AddExercise(Exercise ex){
+        if(ex.getType() == Exercise.TYPE_SCALE)
+            Scales.add(ex);
+        else
+            Arpeggios.add(ex);
+    }
+    public void RemoveExercise(Exercise ex){
+        if(ex.getType() == Exercise.TYPE_SCALE)
+            Scales.remove(ex);
+        else
+            Arpeggios.remove(ex);
+    }
+
     public ArrayList<Exercise> getScales(){ return Scales;}
     public ArrayList<Exercise> getArpeggios(){ return Arpeggios;}
 }
