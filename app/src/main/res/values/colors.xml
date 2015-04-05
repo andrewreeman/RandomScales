@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="TitleTextStyle">#ffffeef5</color>
-    <color name="Background">#ff64bfff</color>
+    <color name="ActionBar.TitleTextStyle">#ffffeef5</color>
+    <color name="ActionBar.Background">#ff64bfff</color>
+    <color name="Preset.ElementHeaderBackground">#ff786965</color>
 </resources>

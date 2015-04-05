@@ -1,17 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.DeviceDefault">
+    <style name="AppTheme" parent="android:Theme.Material.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
     </style>
 
     <style name="ActionBarStyle" parent="android:Widget.DeviceDefault.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/Background</item>
+        <item name="android:background">@color/ActionBar.Background</item>
         <item name="android:titleTextStyle">@style/titleText</item>
     </style>
 
     <style name="titleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/TitleTextStyle</item>
+        <item name="android:textColor">@color/ActionBar.TitleTextStyle</item>
     </style>
 
 
