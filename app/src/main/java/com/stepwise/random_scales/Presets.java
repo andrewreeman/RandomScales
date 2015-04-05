@@ -4,15 +4,17 @@ package com.stepwise.random_scales;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.util.List;
+
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -29,7 +31,7 @@ public class Presets extends Activity {
 
         }
         else{
-           onPresetSelected("All");
+            onPresetSelected("All");
         }
     }
 
@@ -73,33 +75,44 @@ public class Presets extends Activity {
         }
         TableLayout exerciseTable = (TableLayout)findViewById(R.id.Presets_TableLayout);
 
-       //TODO Dynamically populate a table
+
         //TODO this creates the table at the moment. this should be in the onCreate method.
         //TODO what I want is to modify the table after creation
 
         TableRow notes = new TableRow(this);
         ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
 
+        TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        lp.setMargins(15, 15, 15, 15);
+
+
         notesString.add(0, "   ");
         for(String noteString : notesString){
             TextView note = new TextView(this);
+            note.setGravity(Gravity.CENTER);
             note.setText(noteString);
             notes.addView(note);
         }
+        notes.setLayoutParams(lp);
         exerciseTable.addView(notes);
         notesString.remove(0); //now just all notes
 
         ArrayList<String> exercisesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Scales)) );
+        int[] noteColors = getResources().getIntArray(R.array.PresetCheckBoxColors);
         for(String exerciseString : exercisesString) {
             TableRow row = new TableRow(this);
             TextView exercise = new TextView(this);
 
-            exercise.setText(exerciseString);
+            exercise.setText(exerciseString + "     ");
             row.addView(exercise);
-            for(String notUsed : notesString) {
-                ToggleButton toggle = new ToggleButton(this);
-                row.addView(toggle);
+            //for(int color: noteColors){
+            for(int color: noteColors){
+                CheckBox checkBox = new CheckBox(this);
+                checkBox.setBackgroundColor(color);
+                row.addView(checkBox);
             }
+            row.setLayoutParams(lp);
             exerciseTable.addView(row);
         }
 
