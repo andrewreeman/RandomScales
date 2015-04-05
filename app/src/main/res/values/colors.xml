@@ -3,4 +3,32 @@
     <color name="ActionBar.TitleTextStyle">#ffffeef5</color>
     <color name="ActionBar.Background">#ff64bfff</color>
     <color name="Preset.ElementHeaderBackground">#ff786965</color>
+
+    <color name="PresetCheckBoxC">#ff66c758</color>
+    <color name="PresetCheckBoxCs">#ffc7ff8b</color>
+    <color name="PresetCheckBoxD">#ffffbef4</color>
+    <color name="PresetCheckBoxEb">#ff6effe7</color>
+    <color name="PresetCheckBoxE">#ffff8f83</color>
+    <color name="PresetCheckBoxF">#ffff8ae4</color>
+    <color name="PresetCheckBoxFs">#ffff1d51</color>
+    <color name="PresetCheckBoxG">#ff19ffb9</color>
+    <color name="PresetCheckBoxAb">#ff3095ff</color>
+    <color name="PresetCheckBoxA">#ffff9d13</color>
+    <color name="PresetCheckBoxBb">#ff5842ff</color>
+    <color name="PresetCheckBoxB">#ffff5956</color>
+
+    <array name="PresetCheckBoxColors">
+        <item>@color/PresetCheckBoxC</item>
+        <item>@color/PresetCheckBoxCs</item>
+        <item>@color/PresetCheckBoxD</item>
+        <item>@color/PresetCheckBoxEb</item>
+        <item>@color/PresetCheckBoxE</item>
+        <item>@color/PresetCheckBoxF</item>
+        <item>@color/PresetCheckBoxFs</item>
+        <item>@color/PresetCheckBoxG</item>
+        <item>@color/PresetCheckBoxAb</item>
+        <item>@color/PresetCheckBoxA</item>
+        <item>@color/PresetCheckBoxBb</item>
+        <item>@color/PresetCheckBoxB</item>
+    </array>
 </resources>

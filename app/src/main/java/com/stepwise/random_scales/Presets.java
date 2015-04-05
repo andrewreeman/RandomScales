@@ -9,11 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import java.util.List;
 
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,34 +82,26 @@ public class Presets extends Activity {
         //TODO this creates the table at the moment. this should be in the onCreate method.
         //TODO what I want is to modify the table after creation
 
-        TableRow notes = new TableRow(this);
-        ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
+
 
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         lp.setMargins(15, 15, 15, 15);
 
 
-        notesString.add(0, "   ");
-        for(String noteString : notesString){
-            TextView note = new TextView(this);
-            note.setGravity(Gravity.CENTER);
-            note.setText(noteString);
-            notes.addView(note);
-        }
-        notes.setLayoutParams(lp);
-        exerciseTable.addView(notes);
-        notesString.remove(0); //now just all notes
 
         ArrayList<String> exercisesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Scales)) );
         int[] noteColors = getResources().getIntArray(R.array.PresetCheckBoxColors);
+        String largestString = "";
+
         for(String exerciseString : exercisesString) {
             TableRow row = new TableRow(this);
             TextView exercise = new TextView(this);
+            exerciseString += "    ";
+            exercise.setText(exerciseString);
+            largestString = exerciseString.length() > largestString.length() ? exerciseString : largestString;
 
-            exercise.setText(exerciseString + "     ");
             row.addView(exercise);
-            //for(int color: noteColors){
             for(int color: noteColors){
                 CheckBox checkBox = new CheckBox(this);
                 checkBox.setBackgroundColor(color);
@@ -115,6 +110,46 @@ public class Presets extends Activity {
             row.setLayoutParams(lp);
             exerciseTable.addView(row);
         }
+
+
+        //build header
+        TableRow notes = new TableRow(this);
+        ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
+
+        TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);
+        TableRow row = (TableRow)headerTable.getChildAt(0);
+        TableRow emptyRow = new TableRow(this);
+        TextView emptyText = (TextView)row.getChildAt(0);
+
+        emptyText.setText(largestString);
+        emptyText.setVisibility(View.INVISIBLE);
+
+
+        for(String noteString : notesString){
+            TextView note = new TextView(this);
+            note.setGravity(Gravity.CENTER);
+            note.setText(noteString);
+
+            row.addView(note);
+
+            CheckBox checkBox = new CheckBox(this);
+
+            checkBox.setHeight(1);
+            emptyRow.setVisibility(View.INVISIBLE);
+            emptyRow.addView(checkBox);
+        }
+
+        headerTable.addView(emptyRow);
+
+
+
+
+
+
+
+
+
+
 
 
 

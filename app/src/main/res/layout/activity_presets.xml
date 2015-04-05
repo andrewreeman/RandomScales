@@ -5,26 +5,52 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.stepwise.random_scales.Presets">
+
+
+
+
     <HorizontalScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:id="@+id/horizontalScrollView">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:stretchColumns="1"
-                android:id="@+id/Presets.TableLayout"
-                >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            </TableLayout>
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/Presets.Header"
+            >
+            <TableRow>
+                <TextView/>
+            </TableRow>
+        </TableLayout>
 
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Presets.TableLayout"
+                    android:padding="0dp"
+                    android:divider="@drawable/abc_list_divider_mtrl_alpha"
+                    android:showDividers="middle"
+
+                    >
+
+                </TableLayout>
+
+            </LinearLayout>
+        </ScrollView>
         </LinearLayout>
-    </ScrollView>
     </HorizontalScrollView>
+
 </RelativeLayout>
