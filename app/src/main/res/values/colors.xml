@@ -4,18 +4,18 @@
     <color name="ActionBar.Background">#ff64bfff</color>
     <color name="Preset.ElementHeaderBackground">#ff786965</color>
 
-    <color name="PresetCheckBoxC">#ff66c758</color>
-    <color name="PresetCheckBoxCs">#ffc7ff8b</color>
-    <color name="PresetCheckBoxD">#ffffbef4</color>
-    <color name="PresetCheckBoxEb">#ff6effe7</color>
-    <color name="PresetCheckBoxE">#ffff8f83</color>
-    <color name="PresetCheckBoxF">#ffff8ae4</color>
-    <color name="PresetCheckBoxFs">#ffff1d51</color>
-    <color name="PresetCheckBoxG">#ff19ffb9</color>
-    <color name="PresetCheckBoxAb">#ff3095ff</color>
-    <color name="PresetCheckBoxA">#ffff9d13</color>
-    <color name="PresetCheckBoxBb">#ff5842ff</color>
-    <color name="PresetCheckBoxB">#ffff5956</color>
+    <color name="PresetCheckBoxC">#2c66c758</color>
+    <color name="PresetCheckBoxCs">#2cc7ff8b</color>
+    <color name="PresetCheckBoxD">#2cffbef4</color>
+    <color name="PresetCheckBoxEb">#2c6effe7</color>
+    <color name="PresetCheckBoxE">#2cff8f83</color>
+    <color name="PresetCheckBoxF">#2cff8ae4</color>
+    <color name="PresetCheckBoxFs">#2cff1d51</color>
+    <color name="PresetCheckBoxG">#2c19ffb9</color>
+    <color name="PresetCheckBoxAb">#2c3095ff</color>
+    <color name="PresetCheckBoxA">#2cff9d13</color>
+    <color name="PresetCheckBoxBb">#2c5842ff</color>
+    <color name="PresetCheckBoxB">#2cff5956</color>
 
     <array name="PresetCheckBoxColors">
         <item>@color/PresetCheckBoxC</item>

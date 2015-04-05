@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.lang.reflect.Array;
 import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -86,7 +90,7 @@ public class Presets extends Activity {
 
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        lp.setMargins(15, 15, 15, 15);
+        lp.setMargins(0, 30, 0, 30);
 
 
 
@@ -105,6 +109,7 @@ public class Presets extends Activity {
             for(int color: noteColors){
                 CheckBox checkBox = new CheckBox(this);
                 checkBox.setBackgroundColor(color);
+                
                 row.addView(checkBox);
             }
             row.setLayoutParams(lp);
@@ -113,7 +118,7 @@ public class Presets extends Activity {
 
 
         //build header
-        TableRow notes = new TableRow(this);
+
         ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
 
         TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);
@@ -125,17 +130,20 @@ public class Presets extends Activity {
         emptyText.setVisibility(View.INVISIBLE);
 
 
-        for(String noteString : notesString){
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setHeight(1);
+        emptyRow.setVisibility(View.INVISIBLE);
+        emptyRow.addView(checkBox);
+        for(int i=0; i<notesString.size(); ++i){
+
             TextView note = new TextView(this);
             note.setGravity(Gravity.CENTER);
-            note.setText(noteString);
+            note.setText(notesString.get(i));
 
             row.addView(note);
 
-            CheckBox checkBox = new CheckBox(this);
-
+            checkBox = new CheckBox(this);
             checkBox.setHeight(1);
-            emptyRow.setVisibility(View.INVISIBLE);
             emptyRow.addView(checkBox);
         }
 

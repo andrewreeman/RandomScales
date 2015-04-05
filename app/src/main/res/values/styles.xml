@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.DeviceDefault.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:textViewStyle">@style/RandomScaleTextStyle</item>
+
     </style>
 
     <style name="ActionBarStyle" parent="android:Widget.DeviceDefault.Light.ActionBar.Solid.Inverse">
@@ -12,6 +14,11 @@
 
     <style name="titleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="RandomScaleTextStyle">
+        <item name="android:textSize">18sp</item>
+
     </style>
 
 
