@@ -18,19 +18,20 @@ public class SelectableExercises_Data implements Parcelable{
         Arpeggios = new ArrayList<Exercise>();
     }
 
-    public SelectableExercises_Data(Parcel source) {
+    public SelectableExercises_Data(Parcel source){
+        Scales = new ArrayList<Exercise>();
+        Arpeggios = new ArrayList<Exercise>();
         source.readTypedList(Scales, Exercise.CREATOR);
         source.readTypedList(Arpeggios, Exercise.CREATOR);
-
     }
 
-    public void AddExercise(Exercise ex){
+    public void addExercise(Exercise ex){
         if(ex.getType() == Exercise.TYPE_SCALE)
             Scales.add(ex);
         else
             Arpeggios.add(ex);
     }
-    public void RemoveExercise(Exercise ex){
+    public void removeExercise(Exercise ex){
         if(ex.getType() == Exercise.TYPE_SCALE)
             Scales.remove(ex);
         else

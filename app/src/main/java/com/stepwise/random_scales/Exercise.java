@@ -56,6 +56,6 @@ public class Exercise implements Parcelable {
         public Exercise[] newArray(int size) {
             return new Exercise[size];
         }
-    }
+    };
 }
 

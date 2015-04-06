@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 //Not ActionBarActivity ...
@@ -17,6 +18,7 @@ public class MainActivity extends Activity {
 
     String m_SelectedString;
     public static final int REQUEST_CODE__GET_PRESETS = 0;
+    SelectableExercises_Data m_selectableExercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +82,25 @@ public class MainActivity extends Activity {
 
     public void startChangePreset(){
         Intent intent = new Intent(this, Presets.class);
-        startActivity(intent);
         startActivityForResult(intent, REQUEST_CODE__GET_PRESETS);
     }
 
     private void setText(String text){
         TextView textView = (TextView)findViewById(R.id.randResult);
-        textView.setText(m_SelectedString);
+        textView.setText(text);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-
+        if(requestCode == REQUEST_CODE__GET_PRESETS){
+            if(resultCode == RESULT_OK){
+                SelectableExercises_Data exData = data.getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
+                ArrayList<Exercise> scales = exData.getScales();
+                if(scales.size() > 0){
+                    setText(scales.get( scales.size() - 1 ).getName());
+                }
+            }
+        }
 
 
     }

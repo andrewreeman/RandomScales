@@ -150,24 +150,34 @@ public class Presets extends Activity implements OnClickListener {
         Exercise exercise = (Exercise)checkBox.getTag();
 
         if(checkBox.isChecked())
-            m_selectableExercises.AddExercise(exercise);
+            m_selectableExercises.addExercise(exercise);
         else
-            m_selectableExercises.RemoveExercise(exercise);
+            m_selectableExercises.removeExercise(exercise);
     }
 
-    @Override
-    public void onStop(){
-
-    //TODO pass data back to mainactivity....use shared preferences or bundles?
-
-
-        super.onStop();
-    }
 
     public void onSubmitClicked(View v){
-        Dialog dialog = new Dialog(this);
-        dialog.show();
-        this.finish();
+
+     /*   TextView textView = (TextView)findViewById(R.id.DEBUG);
+
+        ArrayList<Exercise> scales = m_selectableExercises.getScales();
+        if(scales.size() > 0){
+            textView.setText(scales.get(scales.size() - 1).getName());
+        }
+        else{
+            textView.setText("Size is zero");
+        }*/
+
+
+        Intent intent = new Intent();
+        SelectableExercises_Data data = new SelectableExercises_Data();
+        Exercise ex = new Exercise("C", "TEST", Exercise.TYPE_SCALE, "no hint");
+        data.addExercise(ex);
+        intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
+        setResult(RESULT_OK, intent);
+        finish();
+
+
     }
 
 

@@ -63,4 +63,17 @@
         android:layout_alignParentStart="true"
         android:onClick="onSubmitClicked" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/DEBUG"
+        android:layout_alignTop="@+id/horizontalScrollView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="158dp"
+        android:textColor="#ffe5fffd"
+        android:background="#75542a27" />
+
 </RelativeLayout>
