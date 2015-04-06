@@ -52,31 +52,27 @@ public class MainActivity extends Activity {
     }
 
     public void generateScale(View view){
-        /*Resources res = getResources();
-        String[] notes = res.getStringArray(R.array.Notes);
-        Random randGen = new Random();
-        int note = randGen.nextInt(notes.length);
-        String[] scales = res.getStringArray(R.array.Scales);
-        int scale = randGen.nextInt(scales.length);
-        String outScale = scales[scale];
-        m_SelectedString = notes[note] + " " + outScale;
-        setText(m_SelectedString);*/
-
-
-
+        ArrayList<Exercise> scales = m_selectableExercises.getScales();
+        if(scales.size() > 0) {
+            Random randGen = new Random();
+            Exercise scale = scales.get(randGen.nextInt(scales.size()));
+            setText(scale.getKey() + " " + scale.getName());
+        }
+        else
+            setText("No scales in set");
     }
 
     public void generateArpeggio(View view){
 
-        Resources res = getResources();
-        String[] notes = res.getStringArray(R.array.Notes);
-        Random randGen = new Random();
-        int note = randGen.nextInt(notes.length);
-        String[] arpeggios = res.getStringArray(R.array.Arpeggios);
-        int arpeggio = randGen.nextInt(arpeggios.length);
+        ArrayList<Exercise> arpeggios = m_selectableExercises.getArpeggios();
+        if(arpeggios.size() > 0) {
+            Random randGen = new Random();
+            Exercise arp = arpeggios.get(randGen.nextInt(arpeggios.size()));
+            setText(arp.getKey() + " " + arp.getName());
+        }
+        else
+            setText("No arpeggios in set");
 
-        m_SelectedString = notes[note] + " " + arpeggios[arpeggio];
-        setText(m_SelectedString);
     }
 //TODO buildExerciseList from preset function ... default preset is ALL
 //TODO preset activity is for modifying presets
@@ -116,13 +112,9 @@ public class MainActivity extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST_CODE__GET_PRESETS){
-            if(resultCode == RESULT_OK){
-                SelectableExercises_Data exData = data.getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
-                ArrayList<Exercise> scales = exData.getScales();
-                if(scales.size() > 0){
-                    setText(scales.get( scales.size() - 1 ).getName());
-                }
-            }
+            if(resultCode == RESULT_OK)
+                m_selectableExercises = data.getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
+
         }
 
 
