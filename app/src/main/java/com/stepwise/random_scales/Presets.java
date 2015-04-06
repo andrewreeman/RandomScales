@@ -3,6 +3,8 @@ package com.stepwise.random_scales;
 //import android.support.v7.app.ActionBarActivity;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import java.util.Arrays;
 
 
 public class Presets extends Activity implements OnClickListener {
+
 
 
     private SelectableExercises_Data m_selectableExercises;
@@ -151,4 +154,21 @@ public class Presets extends Activity implements OnClickListener {
         else
             m_selectableExercises.RemoveExercise(exercise);
     }
+
+    @Override
+    public void onStop(){
+
+    //TODO pass data back to mainactivity....use shared preferences or bundles?
+
+
+        super.onStop();
+    }
+
+    public void onSubmitClicked(View v){
+        Dialog dialog = new Dialog(this);
+        dialog.show();
+        this.finish();
+    }
+
+
 }

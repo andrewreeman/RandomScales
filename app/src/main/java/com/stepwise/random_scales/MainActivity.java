@@ -16,6 +16,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     String m_SelectedString;
+    public static final int REQUEST_CODE__GET_PRESETS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +78,22 @@ public class MainActivity extends Activity {
     }
 
 
-
     public void startChangePreset(){
         Intent intent = new Intent(this, Presets.class);
         startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE__GET_PRESETS);
     }
 
     private void setText(String text){
         TextView textView = (TextView)findViewById(R.id.randResult);
         textView.setText(m_SelectedString);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
+
+
+    }
+
 }
