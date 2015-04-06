@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        m_selectableExercises = new SelectableExercises_Data();
+        setSelectableExercise_Data("Default");
     }
 
 
@@ -50,20 +52,18 @@ public class MainActivity extends Activity {
     }
 
     public void generateScale(View view){
-        Resources res = getResources();
+        /*Resources res = getResources();
         String[] notes = res.getStringArray(R.array.Notes);
         Random randGen = new Random();
         int note = randGen.nextInt(notes.length);
         String[] scales = res.getStringArray(R.array.Scales);
         int scale = randGen.nextInt(scales.length);
         String outScale = scales[scale];
-        if(scale == 0){
-            String[] modes = res.getStringArray(R.array.Modes);
-            int mode = randGen.nextInt(modes.length);
-            outScale = modes[mode];
-        }
         m_SelectedString = notes[note] + " " + outScale;
-        setText(m_SelectedString);
+        setText(m_SelectedString);*/
+
+
+
     }
 
     public void generateArpeggio(View view){
@@ -72,13 +72,36 @@ public class MainActivity extends Activity {
         String[] notes = res.getStringArray(R.array.Notes);
         Random randGen = new Random();
         int note = randGen.nextInt(notes.length);
-        String[] arpeggios = res.getStringArray(R.array.arpeggios);
+        String[] arpeggios = res.getStringArray(R.array.Arpeggios);
         int arpeggio = randGen.nextInt(arpeggios.length);
 
         m_SelectedString = notes[note] + " " + arpeggios[arpeggio];
         setText(m_SelectedString);
     }
+//TODO buildExerciseList from preset function ... default preset is ALL
+//TODO preset activity is for modifying presets
 
+    public void setSelectableExercise_Data(String exercise){
+        //TODO select exercise from xml or json (JSON JSON!!!) file. atm just selects all exercises
+
+
+        String[] notes = getResources().getStringArray(R.array.Notes);
+        String[] scales = getResources().getStringArray(R.array.Scales);
+        String[] arps = getResources().getStringArray(R.array.Arpeggios);
+
+        m_selectableExercises.clear();
+        for(String note : notes){
+            for(String scale : scales){
+                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "");
+                m_selectableExercises.addExercise(ex);
+            }
+            for(String arp : arps){
+                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "");
+                m_selectableExercises.addExercise(ex);
+            }
+        }
+
+    }
 
     public void startChangePreset(){
         Intent intent = new Intent(this, Presets.class);

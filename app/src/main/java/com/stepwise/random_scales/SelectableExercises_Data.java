@@ -41,6 +41,11 @@ public class SelectableExercises_Data implements Parcelable{
     public ArrayList<Exercise> getScales(){ return Scales;}
     public ArrayList<Exercise> getArpeggios(){ return Arpeggios;}
 
+    public void clear(){
+        Scales.clear();
+        Arpeggios.clear();
+    }
+
     @Override
     public int describeContents() {
         return 0;

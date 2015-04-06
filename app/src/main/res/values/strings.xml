@@ -19,7 +19,11 @@
     <string name="scale">Scale:</string>
     <string name="scaleGenButton">Generate random scale</string>
     <string-array name="Scales">
-        <item>Modal</item>
+        <item>Dorian</item>
+        <item>Phrygian</item>
+        <item>Lydian</item>
+        <item>Mixolydian</item>
+        <item>Locrian</item>
         <item >Major</item>
         <item >Natural Minor</item>
         <item >Melodic Minor</item>
@@ -38,16 +42,9 @@
         <item >Altered</item>
         <item >Major Blues</item>
     </string-array>
-    <string-array name="Modes">
-        <item >Dorian</item>
-        <item >Phrygian</item>
-        <item >Lydian</item>
-        <item >Mixolydian</item>
-        <item >Locrian</item>
-    </string-array>
     <string name="arpeggio">Arpeggio: </string>
     <string name="arpGenButton">Generate random arpeggio</string>
-    <string-array name="arpeggios">
+    <string-array name="Arpeggios">
         <item >Major</item>
         <item >Minor</item>
         <item >Diminished</item>
