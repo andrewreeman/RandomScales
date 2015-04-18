@@ -182,38 +182,10 @@ public class Presets extends Activity implements OnClickListener {
         finish();
     }
     public void onSavePresetClicked(View v) {
-        m_selectableExercises
+        m_selectableExercises.toJSON();
     }
 
-    private JSONArray scalesToJSON(){
-        HashMap<String, JSONObject> tonalityToExerciseMap = new HashMap<>();
 
-        try{
-            for (Exercise ex : m_selectableExercises.getScales()) {
-                if (!tonalityToExerciseMap.containsKey(ex.getName())) {
-                    JSONObject newTonalityData = new JSONObject();
-
-                    newTonalityData.put("name", ex.getName());
-                    newTonalityData.put("hint", ex.getHint());
-                    newTonalityData.put("keys", new JSONArray());
-                    tonalityToExerciseMap.put(ex.getName(), newTonalityData);
-                }
-                JSONObject tonalityData = tonalityToExerciseMap.get(ex.getName());
-                JSONArray tonalityKeys = tonalityData.getJSONArray("keys");
-                tonalityKeys.put(ex.getKey());
-            }
-
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
-
-        for(JSONObject ex : tonalityToExerciseMap.values()){
-            Log.d("", ex.toString());
-        }
-
-        return new JSONArray();
-    }
 
 
 

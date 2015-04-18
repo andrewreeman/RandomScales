@@ -2,10 +2,14 @@ package com.stepwise.random_scales;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by andy on 03/04/15.
@@ -48,9 +52,49 @@ public class SelectableExercises_Data implements Parcelable{
         Arpeggios.clear();
     }
 
-    public JSONObject toJSON(){
+    public JSONObject toJSON(String presetName){
+        JSONObject exercises = new JSONObject();
 
+        //TODO don't use hardcoded strings
 
+        try {
+            exercises.put("preset_name", presetName);
+            exercises.put("scales", exerciseListToJson(Scales));
+            exercises.put("arps", exerciseListToJson(Arpeggios));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exercises;
+    }
+
+    private JSONArray exerciseListToJson(ArrayList<Exercise> exList){
+        HashMap<String, JSONObject> tonalityToExerciseMap = new HashMap<>();
+        JSONArray exercises;
+        try{
+            for (Exercise ex : exList ) {
+                if (!tonalityToExerciseMap.containsKey(ex.getName())) {
+                    JSONObject newTonalityData = new JSONObject();
+
+                    newTonalityData.put("name", ex.getName());
+                    newTonalityData.put("hint", ex.getHint());
+                    newTonalityData.put("keys", new JSONArray());
+                    tonalityToExerciseMap.put(ex.getName(), newTonalityData);
+                }
+                JSONObject tonalityData = tonalityToExerciseMap.get(ex.getName());
+                JSONArray tonalityKeys = tonalityData.getJSONArray("keys");
+                tonalityKeys.put(ex.getKey());
+            }
+
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        for(JSONObject ex : tonalityToExerciseMap.values()){
+            exercises.put(ex);
+        }
+
+        return exercises;
     }
 
     @Override
