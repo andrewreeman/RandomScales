@@ -56,24 +56,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OK"
+        android:text="Submit"
         android:id="@+id/submitExercises"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onSubmitClicked" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/DEBUG"
+        android:text="Save Preset"
+        android:id="@+id/savePreset"
         android:layout_alignTop="@+id/horizontalScrollView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="158dp"
-        android:textColor="#ffe5fffd"
-        android:background="#75542a27" />
+        android:onClick="onSavePresetClicked" />
 
 </RelativeLayout>

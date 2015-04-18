@@ -6,11 +6,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.List;
 
 import android.view.View;
@@ -21,10 +24,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 
 public class Presets extends Activity implements OnClickListener {
@@ -170,15 +177,89 @@ public class Presets extends Activity implements OnClickListener {
 
 
         Intent intent = new Intent();
-        SelectableExercises_Data data = new SelectableExercises_Data();
-        Exercise ex = new Exercise("C", "TEST", Exercise.TYPE_SCALE, "no hint");
-        data.addExercise(ex);
         intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
         setResult(RESULT_OK, intent);
         finish();
+    }
+    public void onSavePresetClicked(View v) {
+        m_selectableExercises
+    }
 
+    private JSONArray scalesToJSON(){
+        HashMap<String, JSONObject> tonalityToExerciseMap = new HashMap<>();
 
+        try{
+            for (Exercise ex : m_selectableExercises.getScales()) {
+                if (!tonalityToExerciseMap.containsKey(ex.getName())) {
+                    JSONObject newTonalityData = new JSONObject();
+
+                    newTonalityData.put("name", ex.getName());
+                    newTonalityData.put("hint", ex.getHint());
+                    newTonalityData.put("keys", new JSONArray());
+                    tonalityToExerciseMap.put(ex.getName(), newTonalityData);
+                }
+                JSONObject tonalityData = tonalityToExerciseMap.get(ex.getName());
+                JSONArray tonalityKeys = tonalityData.getJSONArray("keys");
+                tonalityKeys.put(ex.getKey());
+            }
+
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+        for(JSONObject ex : tonalityToExerciseMap.values()){
+            Log.d("", ex.toString());
+        }
+
+        return new JSONArray();
     }
 
 
+
 }
+         /*TODO move this over to app. exerciseList class has a scalesTOJSON and arpeggiosTOJSON methods
+
+
+
+        JSONArray scalesToJSON(){
+            return exerciseListToJSON(m_scales);
+        }
+        JSONArray arpsToJSON(){
+            return exerciseListToJSON(m_arps);
+        }
+
+        JSONArray exerciseListToJSON(ArrayList<Exercises> exList){
+            Map<String, JSONObject> tonalityToExerciseMap = new ...
+
+            for(Exercise ex : exList){
+
+                // new tonality
+                if(!tonalityToExerciseMap.containsKey(ex.name){
+                    JSONObject newTonalityData = new JSONObject();
+                     newTonalityData.put("name", ex.name);
+                     newTonalityData.put("hint", ex.hint);
+                     newTonalityData.put("keys", new JSONArray());
+                     tonalityToExerciseMap.put(ex.name, newTonalityData);
+                }
+
+                //append to keys
+                JSONArray tonalityData = tonalityToExerciseMap.get(ex.name);
+                tonalityData.add(ex.key);
+                //IF not a pointer
+                tonalityToExerciseMap.put(ex.name, tonalityData);
+            }
+
+            JSONArray exerciseList = new JSONArray();
+
+            for(JSONObject tonality : tonalityToExerciseMap.values()){
+                exerciseList.put(tonality);
+            }
+
+            return exerciseList;
+
+        }
+    } */
+
+
+

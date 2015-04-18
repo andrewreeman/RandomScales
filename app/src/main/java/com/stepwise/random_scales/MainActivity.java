@@ -74,8 +74,8 @@ public class MainActivity extends Activity {
             setText("No arpeggios in set");
 
     }
-//TODO buildExerciseList from preset function ... default preset is ALL
-//TODO preset activity is for modifying presets
+
+
 
     public void setSelectableExercise_Data(String exercise){
         //TODO select exercise from xml or json (JSON JSON!!!) file. atm just selects all exercises

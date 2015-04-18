@@ -3,6 +3,8 @@ package com.stepwise.random_scales;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -46,6 +48,11 @@ public class SelectableExercises_Data implements Parcelable{
         Arpeggios.clear();
     }
 
+    public JSONObject toJSON(){
+
+
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -70,6 +77,8 @@ public class SelectableExercises_Data implements Parcelable{
             return new SelectableExercises_Data[size];
         }
     };
+
+
 
 
 }
