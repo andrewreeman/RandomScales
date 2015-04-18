@@ -18,8 +18,11 @@ import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.view.View.OnClickListener;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -34,11 +37,10 @@ import java.util.Arrays;
 import java.util.Map;
 
 
-public class Presets extends Activity implements OnClickListener {
-
-
+public class Presets extends Activity implements OnClickListener, AdapterView.OnItemSelectedListener{
 
     private SelectableExercises_Data m_selectableExercises;
+    private long m_idSelectedPresetType;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -48,7 +50,12 @@ public class Presets extends Activity implements OnClickListener {
         }
         else{
             m_selectableExercises = new SelectableExercises_Data();
-            buildTable();
+            //ArrayList<String> AllScales = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
+            //buildTable(AllScales);
+
+            Spinner spinner  = (Spinner)findViewById(R.id.spinner);
+            spinner.setOnItemSelectedListener(this);
+            m_idSelectedPresetType = spinner.getSelectedItemId();
         }
     }
 
@@ -63,6 +70,20 @@ public class Presets extends Activity implements OnClickListener {
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+        TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
+
+        exerciseTable.removeAllViews();
+        if(pos == 0)
+            buildTable(Exercise.TYPE_SCALE);
+        else
+            buildTable(Exercise.TYPE_ARPEGGIO);
+        setTableCheckBoxes();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent){}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,14 +107,19 @@ public class Presets extends Activity implements OnClickListener {
     }
 
 
-    private void buildTable(){
+    private void buildTable(int exerciseType){
 
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
+        ArrayList<String> exercisesString;
+
+        if(exerciseType == Exercise.TYPE_SCALE)
+            exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
+        else
+            exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Arpeggios)));
         lp.setMargins(0, 30, 0, 30);
 
-        ArrayList<String> exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
         int[] noteColors = getResources().getIntArray(R.array.PresetCheckBoxColors);
         String largestString = "";
 
@@ -107,7 +133,7 @@ public class Presets extends Activity implements OnClickListener {
             for(int i=0; i<noteColors.length; ++i){
                 CheckBox checkBox = new CheckBox(this);
                 checkBox.setBackgroundColor(noteColors[i]);
-                Exercise exerciseInfo = new Exercise(notesString.get(i), exerciseString, Exercise.TYPE_SCALE, "nothing");
+                Exercise exerciseInfo = new Exercise(notesString.get(i), exerciseString, exerciseType, "nothing");
                 checkBox.setTag(exerciseInfo);
 
                 checkBox.setOnClickListener(this);
@@ -182,11 +208,8 @@ public class Presets extends Activity implements OnClickListener {
         finish();
     }
     public void onSavePresetClicked(View v) {
-        m_selectableExercises.toJSON();
+        m_selectableExercises.toJSON("presetName");
     }
-
-
-
 
 
 }

@@ -69,7 +69,7 @@ public class SelectableExercises_Data implements Parcelable{
 
     private JSONArray exerciseListToJson(ArrayList<Exercise> exList){
         HashMap<String, JSONObject> tonalityToExerciseMap = new HashMap<>();
-        JSONArray exercises;
+        JSONArray exercises = new JSONArray();
         try{
             for (Exercise ex : exList ) {
                 if (!tonalityToExerciseMap.containsKey(ex.getName())) {
