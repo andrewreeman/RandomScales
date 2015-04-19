@@ -34,6 +34,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.Map;
 
 
@@ -72,14 +73,19 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
 
         exerciseTable.removeAllViews();
-        if(pos == 0)
+        if(pos == 0) {
             buildTable(Exercise.TYPE_SCALE);
-        else
+            setTableCheckBoxes(m_selectableExercises.getScales());
+        }
+        else {
             buildTable(Exercise.TYPE_ARPEGGIO);
-        setTableCheckBoxes();
+            setTableCheckBoxes(m_selectableExercises.getArpeggios());
+        }
+
     }
 
     @Override
@@ -89,6 +95,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_presets, menu);
+
         return true;
     }
 
@@ -135,7 +142,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
                 checkBox.setBackgroundColor(noteColors[i]);
                 Exercise exerciseInfo = new Exercise(notesString.get(i), exerciseString, exerciseType, "nothing");
                 checkBox.setTag(exerciseInfo);
-
+//TODO have all scales and all arpeggios owned by Presets object. This allows persistance when table is destroyed.
                 checkBox.setOnClickListener(this);
                 row.addView(checkBox);
             }
@@ -146,8 +153,6 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
     }
 
     private void buildTableHeader(String largestString, ArrayList<String> notesString){
-
-
 
         TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);
         TableRow row = (TableRow)headerTable.getChildAt(0);
@@ -174,6 +179,17 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         }
 
         headerTable.addView(emptyRow);
+
+    }
+
+    private void setTableCheckBoxes(ArrayList<Exercise> exercises){
+        TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
+
+        for(Exercise ex : exercises){
+
+
+        }
+
     }
 
 

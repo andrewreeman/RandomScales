@@ -7,70 +7,97 @@
     tools:context="com.stepwise.random_scales.Presets">
 
 
-
-
-    <HorizontalScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/horizontalScrollView">
+        android:layout_alignBottom="@+id/savePreset"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout"
+        android:weightSum="1">
 
-        <LinearLayout
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Save Preset"
+            android:id="@+id/savePreset"
+            android:layout_alignTop="@+id/horizontalScrollView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:onClick="onSavePresetClicked" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/Presets.Header"
-            >
-            <TableRow>
-                <TextView/>
-            </TableRow>
-        </TableLayout>
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="320dp"
+            android:id="@+id/horizontalScrollView">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TableLayout
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/Presets.Header"
+                >
+                <TableRow>
+                    <TextView/>
+                </TableRow>
+            </TableLayout>
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/Presets.TableLayout"
-                    android:padding="0dp"
-                    android:divider="@drawable/abc_list_divider_mtrl_alpha"
-                    android:showDividers="middle"
+                    android:layout_height="wrap_content">
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Presets.TableLayout"
+                        android:padding="0dp"
+                        android:divider="@drawable/abc_list_divider_mtrl_alpha"
+                        android:showDividers="middle"
 
-                    >
+                        >
 
-                </TableLayout>
+                    </TableLayout>
 
+                </LinearLayout>
+            </ScrollView>
             </LinearLayout>
-        </ScrollView>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:weightSum="1"
+            android:layout_weight="0.20">
+
+            <Button
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/submitExercises"
+                android:onClick="onSubmitClicked"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:layout_weight="0.86"
+                android:spinnerMode="dropdown"
+                android:entries="@array/spinnerExerciseTypes"
+            />
+
         </LinearLayout>
-    </HorizontalScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/submitExercises"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onSubmitClicked" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Preset"
-        android:id="@+id/savePreset"
-        android:layout_alignTop="@+id/horizontalScrollView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onSavePresetClicked" />
+    </LinearLayout>
 
 </RelativeLayout>
