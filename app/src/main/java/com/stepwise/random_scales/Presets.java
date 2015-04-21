@@ -1,47 +1,38 @@
 package com.stepwise.random_scales;
 
 //import android.support.v7.app.ActionBarActivity;
-import android.app.ActionBar;
+
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.List;
-
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.view.View.OnClickListener;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import java.util.Map;
+import java.util.HashMap;
 
 
 public class Presets extends Activity implements OnClickListener, AdapterView.OnItemSelectedListener{
 
     private SelectableExercises_Data m_selectableExercises;
     private long m_idSelectedPresetType;
+    //TODO less of a monster class
+    //TODO delagate handle checkbox exercise data mapping
+    private ExerciseCheckboxDelegate m_exerciseCheckBoxDelegate;
+    private HashMap<String, ArrayList<Exercise>> m_allScales;
+    private HashMap<String, ArrayList<Exercise>> m_allArps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -50,6 +41,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
 
         }
         else{
+            fillAllScalesAndArps();
             m_selectableExercises = new SelectableExercises_Data();
             //ArrayList<String> AllScales = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
             //buildTable(AllScales);
@@ -150,6 +142,31 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
             exerciseTable.addView(row);
         }
         buildTableHeader(largestString, notesString);
+    }
+
+    private void fillAllScalesAndArps(){
+        ArrayList<String> notesString = new ArrayList<>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
+        ArrayList<String> scaleTypes = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
+        ArrayList<String> arpTypes = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.Arpeggios)));
+        m_allScales = new HashMap<>();
+        m_allArps = new HashMap<>();
+
+        for(String scale : scaleTypes){
+            ArrayList<Exercise> exercises = new ArrayList<>();
+            for(String note : notesString) {
+                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
+                exercises.add(ex);
+            }
+            m_allScales.put(scale, exercises);
+        }
+        for(String arp : arpTypes){
+            ArrayList<Exercise> exercises = new ArrayList<>();
+            for(String note : notesString) {
+                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
+                exercises.add(ex);
+            }
+            m_allArps.put(arp, exercises);
+        }
     }
 
     private void buildTableHeader(String largestString, ArrayList<String> notesString){
