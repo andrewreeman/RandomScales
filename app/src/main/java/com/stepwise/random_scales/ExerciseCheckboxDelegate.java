@@ -1,5 +1,6 @@
 package com.stepwise.random_scales;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -22,6 +23,7 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     public void setExerciseCheckboxLink(Exercise ex, CheckBox check){
         m_checkboxExerciseMap.put(check, ex);
         m_exerciseCheckBoxMap.put(ex, check);
+        check.setOnClickListener(this);
     }
 
     public void clear(){
@@ -39,7 +41,7 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     @Override
     public void onClick(View v){
-
+        Log.d("", "Clicked");
     }
 
     public void setCheckBox(Exercise ex, boolean isChecked){

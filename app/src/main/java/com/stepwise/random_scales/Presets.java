@@ -29,6 +29,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
     private long m_idSelectedPresetType;
     //TODO less of a monster class
     //TODO delagate handle checkbox exercise data mapping
+
     private ExerciseCheckboxDelegate m_exerciseCheckBoxDelegate;
     private HashMap<String, ArrayList<Exercise>> m_allScales;
     private HashMap<String, ArrayList<Exercise>> m_allArps;
@@ -43,6 +44,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         else{
             fillAllScalesAndArps();
             m_selectableExercises = new SelectableExercises_Data();
+            m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             //ArrayList<String> AllScales = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
             //buildTable(AllScales);
 
@@ -67,14 +69,16 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
 
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
-
         exerciseTable.removeAllViews();
+
+        //TODO should not need to constantly rebuild and remove header
+        m_exerciseCheckBoxDelegate.clear();
         if(pos == 0) {
-            buildTable(Exercise.TYPE_SCALE);
+            buildTable(m_allScales);
             setTableCheckBoxes(m_selectableExercises.getScales());
         }
         else {
-            buildTable(Exercise.TYPE_ARPEGGIO);
+            buildTable(m_allArps);
             setTableCheckBoxes(m_selectableExercises.getArpeggios());
         }
 
@@ -106,42 +110,45 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
     }
 
 
-    private void buildTable(int exerciseType){
+    private void buildTable(HashMap<String, ArrayList<Exercise>> allExercises){
 
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ArrayList<String> notesString = new ArrayList<String>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
-        ArrayList<String> exercisesString;
 
-        if(exerciseType == Exercise.TYPE_SCALE)
+        ArrayList<Exercise> exercises;
+        //ArrayList<String> exercisesString;
+
+       /* if(exerciseType == Exercise.TYPE_SCALE)
             exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
         else
-            exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Arpeggios)));
+            exercisesString = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Arpeggios))); */
         lp.setMargins(0, 30, 0, 30);
 
         int[] noteColors = getResources().getIntArray(R.array.PresetCheckBoxColors);
         String largestString = "";
 
-        for (String exerciseString : exercisesString) {
+        for (String exerciseString : allExercises.keySet()) {
             TableRow row = new TableRow(this);
-            TextView exercise = new TextView(this);
-            exercise.setText(exerciseString + "    ");
+            TextView exerciseName = new TextView(this);
+            exerciseName.setText(exerciseString + "    ");
             largestString = exerciseString.length() > largestString.length() ? exerciseString : largestString;
-
-            row.addView(exercise);
-            for(int i=0; i<noteColors.length; ++i){
+            exercises = allExercises.get(exerciseString);
+            row.addView(exerciseName);
+            for(int i=0; i<exercises.size(); ++i){
                 CheckBox checkBox = new CheckBox(this);
                 checkBox.setBackgroundColor(noteColors[i]);
-                Exercise exerciseInfo = new Exercise(notesString.get(i), exerciseString, exerciseType, "nothing");
-                checkBox.setTag(exerciseInfo);
-//TODO have all scales and all arpeggios owned by Presets object. This allows persistance when table is destroyed.
-                checkBox.setOnClickListener(this);
+                m_exerciseCheckBoxDelegate.setExerciseCheckboxLink(exercises.get(i), checkBox);
+                //Exercise exerciseInfo = new Exercise(notesString.get(i), exerciseString, exerciseType, "nothing");
+
+                //checkBox.setTag(exerciseInfo);
+
+                //checkBox.setOnClickListener(this);
                 row.addView(checkBox);
             }
             row.setLayoutParams(lp);
             exerciseTable.addView(row);
         }
-        buildTableHeader(largestString, notesString);
+        buildTableHeader(largestString);
     }
 
     private void fillAllScalesAndArps(){
@@ -169,16 +176,21 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         }
     }
 
-    private void buildTableHeader(String largestString, ArrayList<String> notesString){
+    private void buildTableHeader(String largestString){
 
+        ArrayList<String> notesString = new ArrayList<>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
         TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);
-        TableRow row = (TableRow)headerTable.getChildAt(0);
+        headerTable.removeAllViews();
+
+        //TableRow row = (TableRow)headerTable.getChildAt(0);
+        TableRow row = new TableRow(this);
         TableRow emptyRow = new TableRow(this);
-        TextView emptyText = (TextView)row.getChildAt(0);
+        //TextView emptyText = (TextView)row.getChildAt(0);
+        TextView emptyText = new TextView(this);
 
         emptyText.setText(largestString + "   ");
         emptyText.setVisibility(View.INVISIBLE);
-
+        row.addView(emptyText);
 
         CheckBox checkBox = new CheckBox(this);
         checkBox.setHeight(1);
@@ -195,8 +207,10 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
             emptyRow.addView(checkBox);
         }
 
-        headerTable.addView(emptyRow);
 
+        //TODO ...use layouts better to avoid this silly code
+        headerTable.addView(row);
+        headerTable.addView(emptyRow);
     }
 
     private void setTableCheckBoxes(ArrayList<Exercise> exercises){
