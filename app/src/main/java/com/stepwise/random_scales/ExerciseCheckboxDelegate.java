@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -25,6 +26,27 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         m_exerciseCheckBoxMap.put(ex, check);
         check.setOnClickListener(this);
     }
+    public void setModel(SelectableExercises_Data model){
+        m_selectableExerciseData = model;
+    }
+
+    public void updateScales(){
+        ArrayList<Exercise> scales = m_selectableExerciseData.getScales();
+        update(scales);
+    }
+
+    public void updateArps(){
+        ArrayList<Exercise> arps = m_selectableExerciseData.getArpeggios();
+        update(arps);
+    }
+
+    private void update(ArrayList<Exercise> exerciseList){
+        Log.d("update", "reached");
+        for(Exercise ex : exerciseList){
+            CheckBox checkBox = m_exerciseCheckBoxMap.get(ex);
+            checkBox.setChecked(true);
+        }
+    }
 
     public void clear(){
         m_checkboxExerciseMap.clear();
@@ -42,6 +64,8 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     @Override
     public void onClick(View v){
         Log.d("", "Clicked");
+        CheckBox checkBox = (CheckBox)v;
+        m_selectableExerciseData.addExercise(m_checkboxExerciseMap.get(checkBox));
     }
 
     public void setCheckBox(Exercise ex, boolean isChecked){
@@ -49,3 +73,4 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     }
 
 }
+

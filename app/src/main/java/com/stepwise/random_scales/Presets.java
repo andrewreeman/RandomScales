@@ -5,6 +5,7 @@ package com.stepwise.random_scales;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +22,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
 
 
-public class Presets extends Activity implements OnClickListener, AdapterView.OnItemSelectedListener{
+public class Presets extends Activity implements AdapterView.OnItemSelectedListener{
 
     private SelectableExercises_Data m_selectableExercises;
     private long m_idSelectedPresetType;
     //TODO less of a monster class
-    //TODO delagate handle checkbox exercise data mapping
 
     private ExerciseCheckboxDelegate m_exerciseCheckBoxDelegate;
     private HashMap<String, ArrayList<Exercise>> m_allScales;
@@ -45,6 +46,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
             fillAllScalesAndArps();
             m_selectableExercises = new SelectableExercises_Data();
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
+            m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
             //ArrayList<String> AllScales = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
             //buildTable(AllScales);
 
@@ -62,7 +64,6 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         button.setText("This is a test");
         frameLayout.addView(button); */
 
-
     }
 
     @Override
@@ -71,15 +72,15 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
         exerciseTable.removeAllViews();
 
-        //TODO should not need to constantly rebuild and remove header
+        //TODO better exercise TYPE layout
         m_exerciseCheckBoxDelegate.clear();
         if(pos == 0) {
             buildTable(m_allScales);
-            setTableCheckBoxes(m_selectableExercises.getScales());
+            m_exerciseCheckBoxDelegate.updateScales();
         }
         else {
             buildTable(m_allArps);
-            setTableCheckBoxes(m_selectableExercises.getArpeggios());
+            m_exerciseCheckBoxDelegate.updateArps();
         }
 
     }
@@ -101,10 +102,15 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id) {
+            case R.id.action_settings:
+                return true;
+            case android.R.id.home:
+            case R.id.home:
+            case R.id.homeAsUp:
+            case R.id.up:
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -149,6 +155,7 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
             exerciseTable.addView(row);
         }
         buildTableHeader(largestString);
+
     }
 
     private void fillAllScalesAndArps(){
@@ -213,47 +220,17 @@ public class Presets extends Activity implements OnClickListener, AdapterView.On
         headerTable.addView(emptyRow);
     }
 
-    private void setTableCheckBoxes(ArrayList<Exercise> exercises){
-        TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
-
-        for(Exercise ex : exercises){
-
-
-        }
-
-    }
-
-
     @Override
-    public void onClick(View v) {
-        CheckBox checkBox = (CheckBox)v;
-        Exercise exercise = (Exercise)checkBox.getTag();
-
-        if(checkBox.isChecked())
-            m_selectableExercises.addExercise(exercise);
-        else
-            m_selectableExercises.removeExercise(exercise);
-    }
-
-
-    public void onSubmitClicked(View v){
-
-     /*   TextView textView = (TextView)findViewById(R.id.DEBUG);
-
-        ArrayList<Exercise> scales = m_selectableExercises.getScales();
-        if(scales.size() > 0){
-            textView.setText(scales.get(scales.size() - 1).getName());
-        }
-        else{
-            textView.setText("Size is zero");
-        }*/
-
-
+    public void onBackPressed(){
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    //TODO send selectable exercises to presets when preset clicked
+
+
     public void onSavePresetClicked(View v) {
         m_selectableExercises.toJSON("presetName");
     }
