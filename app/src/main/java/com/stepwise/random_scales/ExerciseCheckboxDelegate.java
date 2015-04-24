@@ -6,6 +6,7 @@ import android.widget.CheckBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by andy on 19/04/15.
@@ -41,13 +42,19 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     }
 
     private void update(ArrayList<Exercise> exerciseList){
-        Log.d("update", "reached");
         for(Exercise ex : exerciseList){
             CheckBox checkBox = m_exerciseCheckBoxMap.get(ex);
             checkBox.setChecked(true);
         }
     }
 
+    public void deselectAllCheckBoxes(){
+        for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
+            entry.getKey().setChecked(false);
+            m_selectableExerciseData.removeExercise(entry.getValue());
+        }
+        clear();
+    }
     public void clear(){
         m_checkboxExerciseMap.clear();
         m_exerciseCheckBoxMap.clear();
@@ -63,9 +70,12 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     @Override
     public void onClick(View v){
-        Log.d("", "Clicked");
-        CheckBox checkBox = (CheckBox)v;
-        m_selectableExerciseData.addExercise(m_checkboxExerciseMap.get(checkBox));
+            CheckBox checkBox = (CheckBox)v;
+        Exercise ex = m_checkboxExerciseMap.get(checkBox);
+        if(checkBox.isChecked())
+            m_selectableExerciseData.addExercise(ex);
+        else
+            m_selectableExerciseData.removeExercise(ex);
     }
 
     public void setCheckBox(Exercise ex, boolean isChecked){

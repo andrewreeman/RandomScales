@@ -41,7 +41,7 @@ public class SelectableExercises_Data implements Parcelable{
         if(ex.getType() == Exercise.TYPE_SCALE)
             Scales.remove(ex);
         else
-            Arpeggios.remove(ex);
+            Arpeggios.remove(ex); 
     }
 
     public ArrayList<Exercise> getScales(){ return Scales;}

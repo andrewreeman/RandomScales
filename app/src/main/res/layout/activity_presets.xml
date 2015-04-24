@@ -27,6 +27,18 @@
             android:layout_alignParentStart="true"
             android:onClick="onSavePresetClicked" />
 
+        <Button
+            android:layout_width="77dp"
+            android:layout_height="36dp"
+            android:text="Clear"
+            android:id="@+id/clearChecks"
+            android:layout_alignTop="@+id/linearLayout"
+            android:layout_alignRight="@+id/linearLayout"
+            android:layout_alignEnd="@+id/linearLayout"
+            android:layout_marginRight="280dp"
+            android:layout_marginEnd="280dp"
+            android:onClick="onClearClicked" />
+
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="320dp"

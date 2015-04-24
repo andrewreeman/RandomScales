@@ -43,12 +43,14 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
         }
         else{
+
+
+            //m_selectableExercises = new SelectableExercises_Data();
+            m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
             fillAllScalesAndArps();
-            m_selectableExercises = new SelectableExercises_Data();
+            //m_selectableExercises = initFromIntent(getIntent());
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
-            //ArrayList<String> AllScales = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
-            //buildTable(AllScales);
 
             Spinner spinner  = (Spinner)findViewById(R.id.spinner);
             spinner.setOnItemSelectedListener(this);
@@ -114,7 +116,15 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         }
         return super.onOptionsItemSelected(item);
     }
+/*
+    private SelectableExercises_Data initFromIntent(Intent intent){
+        SelectableExercises_Data intentData = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
 
+        ArrayList<Exercise>
+
+
+        return new SelectableExercises_Data();
+    }*/
 
     private void buildTable(HashMap<String, ArrayList<Exercise>> allExercises){
 
@@ -159,9 +169,11 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     }
 
     private void fillAllScalesAndArps(){
-        ArrayList<String> notesString = new ArrayList<>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
-        ArrayList<String> scaleTypes = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.Scales)));
-        ArrayList<String> arpTypes = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.Arpeggios)));
+        String[] notesString = getResources().getStringArray(R.array.Notes);
+        String[] scaleTypes = getResources().getStringArray(R.array.Scales);
+        String[] arpTypes = getResources().getStringArray(R.array.Arpeggios);
+        ArrayList<Exercise> selectedScales = m_selectableExercises.getScales();
+        ArrayList<Exercise> selectedArps = m_selectableExercises.getArpeggios();
         m_allScales = new HashMap<>();
         m_allArps = new HashMap<>();
 
@@ -169,6 +181,10 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
                 Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
+                if(selectedScales.contains(ex)){
+                    int index = selectedScales.indexOf(ex);
+                    ex = selectedScales.get(index);
+                }
                 exercises.add(ex);
             }
             m_allScales.put(scale, exercises);
@@ -177,10 +193,15 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
                 Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
+                if(selectedArps.contains(ex)){
+                    int index = selectedArps.indexOf(ex);
+                    ex = selectedArps.get(index);
+                }
                 exercises.add(ex);
             }
             m_allArps.put(arp, exercises);
         }
+
     }
 
     private void buildTableHeader(String largestString){
@@ -235,6 +256,9 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         m_selectableExercises.toJSON("presetName");
     }
 
+    public void onClearClicked(View v){
+        m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
+    }
 
 }
          /*TODO move this over to app. exerciseList class has a scalesTOJSON and arpeggiosTOJSON methods

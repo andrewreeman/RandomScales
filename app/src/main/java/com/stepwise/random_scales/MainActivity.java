@@ -88,11 +88,11 @@ public class MainActivity extends Activity {
         m_selectableExercises.clear();
         for(String note : notes){
             for(String scale : scales){
-                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "");
+                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
                 m_selectableExercises.addExercise(ex);
             }
             for(String arp : arps){
-                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "");
+                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
                 m_selectableExercises.addExercise(ex);
             }
         }
@@ -101,6 +101,7 @@ public class MainActivity extends Activity {
 
     public void startChangePreset(){
         Intent intent = new Intent(this, Presets.class);
+        intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
         startActivityForResult(intent, REQUEST_CODE__GET_PRESETS);
     }
 
@@ -114,10 +115,7 @@ public class MainActivity extends Activity {
         if(requestCode == REQUEST_CODE__GET_PRESETS){
             if(resultCode == RESULT_OK)
                 m_selectableExercises = data.getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
-
         }
-
-
     }
 
 }

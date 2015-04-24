@@ -2,6 +2,9 @@ package com.stepwise.random_scales;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import java.util.Objects;
 
 /**
  * Created by andy on 03/04/15.
@@ -28,6 +31,17 @@ public class Exercise implements Parcelable {
     public String getHint(){return m_exerciseHint;}
     public int getType(){ return m_type; }
 
+
+    @Override
+    public boolean equals(Object other){
+        Exercise otherEx = (Exercise)other;
+        return this.getHint().equals(otherEx.getHint()) && this.getKey().equals(otherEx.getKey()) && this.getType() == otherEx.getType() && this.getName().equals(otherEx.getName());
+    }
+
+    @Override
+    public String toString(){
+        return getName() + "\n" + getKey() + "\n" + getHint() + "\n" + getType();
+    }
     @Override
     public int describeContents() {
         return 0;
@@ -56,6 +70,8 @@ public class Exercise implements Parcelable {
         public Exercise[] newArray(int size) {
             return new Exercise[size];
         }
+
+
     };
 }
 
