@@ -53,7 +53,6 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
             entry.getKey().setChecked(false);
             m_selectableExerciseData.removeExercise(entry.getValue());
         }
-        clear();
     }
     public void clear(){
         m_checkboxExerciseMap.clear();
