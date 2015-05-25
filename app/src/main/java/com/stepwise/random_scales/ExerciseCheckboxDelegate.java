@@ -48,6 +48,13 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         }
     }
 
+    public void selectAllCheckBoxes(){
+        for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
+            entry.getKey().setChecked(true);
+            m_selectableExerciseData.addExercise(entry.getValue());
+        }
+    }
+
     public void deselectAllCheckBoxes(){
         for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
             entry.getKey().setChecked(false);

@@ -5,7 +5,6 @@ package com.stepwise.random_scales;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -43,18 +43,18 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
         }
         else{
-
-
             //m_selectableExercises = new SelectableExercises_Data();
             m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
             fillAllScalesAndArps();
             //m_selectableExercises = initFromIntent(getIntent());
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
-
             Spinner spinner  = (Spinner)findViewById(R.id.spinner);
             spinner.setOnItemSelectedListener(this);
             m_idSelectedPresetType = spinner.getSelectedItemId();
+
+            Button toggleClear = (Button)findViewById(R.id.clearChecks);
+            toggleClear.setTag(true);
         }
     }
 
@@ -201,7 +201,6 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             }
             m_allArps.put(arp, exercises);
         }
-
     }
 
     private void buildTableHeader(String largestString){
@@ -257,7 +256,21 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     }
 
     public void onClearClicked(View v){
-        m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
+        Boolean isClearState = (Boolean)v.getTag();
+        if(isClearState) {
+            m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
+            v.setTag(false);
+        }
+        else{
+            m_exerciseCheckBoxDelegate.selectAllCheckBoxes();
+            v.setTag(true);
+        }
+
+
+
+
+        //m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
+
     }
 
 }
