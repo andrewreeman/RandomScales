@@ -50,16 +50,25 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     public void selectAllCheckBoxes(){
         for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
-            entry.getKey().setChecked(true);
-            m_selectableExerciseData.addExercise(entry.getValue());
+            if( !(entry.getKey().isChecked())) {
+                entry.getKey().setChecked(true);
+                m_selectableExerciseData.addExercise(entry.getValue());
+            }
         }
+        //Log.d("Arpeggio array size: ", String.valueOf( m_selectableExerciseData.getArpeggios().size() ));
+        //Log.d("Scale array size: ", String.valueOf(m_selectableExerciseData.getScales().size() ));
     }
 
     public void deselectAllCheckBoxes(){
         for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
-            entry.getKey().setChecked(false);
-            m_selectableExerciseData.removeExercise(entry.getValue());
+            if(entry.getKey().isChecked()) {
+                entry.getKey().setChecked(false);
+                m_selectableExerciseData.removeExercise(entry.getValue());
+                //Log.d("Clearing: ", entry.getValue().toString());
+            }
         }
+     //   Log.d("Arpeggio array size: ", String.valueOf( m_selectableExerciseData.getArpeggios().size() ));
+       // Log.d("Scale array size: ", String.valueOf(m_selectableExerciseData.getScales().size() ));
     }
     public void clear(){
         m_checkboxExerciseMap.clear();
@@ -76,7 +85,7 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     @Override
     public void onClick(View v){
-            CheckBox checkBox = (CheckBox)v;
+        CheckBox checkBox = (CheckBox)v;
         Exercise ex = m_checkboxExerciseMap.get(checkBox);
         if(checkBox.isChecked())
             m_selectableExerciseData.addExercise(ex);

@@ -5,13 +5,15 @@ package com.stepwise.random_scales;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonWriter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -19,11 +21,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
-
 
 public class Presets extends Activity implements AdapterView.OnItemSelectedListener{
 
@@ -49,9 +57,12 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             //m_selectableExercises = initFromIntent(getIntent());
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
-            Spinner spinner  = (Spinner)findViewById(R.id.spinner);
+
+            Spinner spinner  = (Spinner)findViewById(R.id.scaleOrArp);
             spinner.setOnItemSelectedListener(this);
             m_idSelectedPresetType = spinner.getSelectedItemId();
+
+            initPresetSpinner();
 
             Button toggleClear = (Button)findViewById(R.id.clearChecks);
             toggleClear.setTag(true);
@@ -71,19 +82,25 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
 
-        TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
-        exerciseTable.removeAllViews();
 
-        //TODO better exercise TYPE layout
-        m_exerciseCheckBoxDelegate.clear();
-        if(pos == 0) {
-            buildTable(m_allScales);
-            m_exerciseCheckBoxDelegate.updateScales();
+        if(parent.getId() == R.id.scaleOrArp) {
+            TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
+            exerciseTable.removeAllViews();
+
+            //TODO better exercise TYPE layout
+            m_exerciseCheckBoxDelegate.clear();
+            if (pos == 0) {
+                buildTable(m_allScales);
+                m_exerciseCheckBoxDelegate.updateScales();
+            } else {
+                buildTable(m_allArps);
+                m_exerciseCheckBoxDelegate.updateArps();
+            }
         }
         else {
-            buildTable(m_allArps);
-            m_exerciseCheckBoxDelegate.updateArps();
+            Log.d("", (String)parent.getItemAtPosition(pos));
         }
+
 
     }
 
@@ -125,6 +142,51 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
         return new SelectableExercises_Data();
     }*/
+
+    private ArrayList<String> getPresetNames(){
+        ArrayList<String> presets = new ArrayList<>();
+
+        presets.add("this is another test");
+        presets.add("and another");
+
+        Log.d("File contents:", readPresetFile());
+
+        return presets;
+    }
+
+    private String readPresetFile() {
+        StringBuffer inBuffer = new StringBuffer();
+        String fileName = getString(R.string.com_stepwise_random_scales_scalePresetFile);
+        try {
+            BufferedReader inFile = new BufferedReader(new InputStreamReader(openFileInput(fileName)));
+            String inString;
+
+            while ((inString = inFile.readLine()) != null) {
+                inBuffer.append(inString + "\n");
+            }
+            inFile.close();
+        } catch (FileNotFoundException e) {
+            Log.d("readPresetFile", "Error opening file: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("readPresetFile", "Error writing to pupil_details.json: " + e.getMessage());
+        }
+        return inBuffer.toString();
+    }
+
+    private void initPresetSpinner(){
+        Spinner spinner = (Spinner)findViewById(R.id.presets);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        arrayAdapter.addAll(getPresetNames());
+
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(this);
+
+    }
+
+
 
     private void buildTable(HashMap<String, ArrayList<Exercise>> allExercises){
 
@@ -252,8 +314,23 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
 
     public void onSavePresetClicked(View v) {
-        m_selectableExercises.toJSON("presetName");
+        JSONObject currentPreset = m_selectableExercises.toJSON("presetName");
+        Log.d("Preset write: ", currentPreset.toString());
+
+        try{
+            FileOutputStream fileOutputStream = openFileOutput(getString(R.string.com_stepwise_random_scales_scalePresetFile), MODE_PRIVATE);
+            fileOutputStream.write( (currentPreset.toString() + "\n").getBytes() );
+            fileOutputStream.close();
+        }
+        catch(FileNotFoundException e){
+            Log.d("onSavePresetClicked", "Error opening file: " + e.getMessage());
+        }
+        catch (IOException e){
+            Log.d("onSavePresetClicked", "Error writing to pupil_details.json: " + e.getMessage());
+        }
     }
+
+
 
     public void onClearClicked(View v){
         Boolean isClearState = (Boolean)v.getTag();

@@ -38,10 +38,13 @@ public class SelectableExercises_Data implements Parcelable{
             Arpeggios.add(ex);
     }
     public void removeExercise(Exercise ex){
-        if(ex.getType() == Exercise.TYPE_SCALE)
+        if(ex.getType() == Exercise.TYPE_SCALE) {
             Scales.remove(ex);
-        else
-            Arpeggios.remove(ex); 
+        }
+        else {
+            Arpeggios.remove(ex);
+            //Log.d("removed arpeggio: ", ex.toString());
+        }
     }
 
     public ArrayList<Exercise> getScales(){ return Scales;}

@@ -16,7 +16,6 @@ import java.util.Random;
 //Not ActionBarActivity ...
 public class MainActivity extends Activity {
 
-    String m_SelectedString;
     public static final int REQUEST_CODE__GET_PRESETS = 0;
     SelectableExercises_Data m_selectableExercises;
 
@@ -72,12 +71,11 @@ public class MainActivity extends Activity {
         }
         else
             setText("No arpeggios in set");
-
     }
 
 
 
-    public void setSelectableExercise_Data(String exercise){
+    public void setSelectableExercise_Data(String preset){
         //TODO select exercise from xml or json (JSON JSON!!!) file. atm just selects all exercises
 
 

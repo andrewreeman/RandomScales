@@ -17,6 +17,12 @@
         android:id="@+id/linearLayout"
         android:weightSum="1">
 
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/presets"
+            android:layout_gravity="center_horizontal" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,7 +99,7 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"
+                android:id="@+id/scaleOrArp"
                 android:layout_weight="0.86"
                 android:spinnerMode="dropdown"
                 android:entries="@array/spinnerExerciseTypes"
