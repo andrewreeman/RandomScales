@@ -4,6 +4,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +24,63 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     public ExerciseCheckboxDelegate(){
         m_checkboxExerciseMap = new HashMap<CheckBox, Exercise>();
         m_exerciseCheckBoxMap = new HashMap<Exercise, CheckBox>();
-   }
+    }
+//TODO this should be part of a Preset Manager class
+    public void setFromJSON(JSONObject obj, HashMap<String, ArrayList<Exercise>> allScales, HashMap<String, ArrayList<Exercise>> allArps){
+        JSONArray scales;
+        JSONArray arps;
+        JSONArray keys;
+        String name;
+        String hint;
+        Exercise ex;
+        ArrayList<Exercise> exerciseList;
+
+        try{
+            deselectAllCheckBoxes();
+            m_selectableExerciseData.clear();
+
+            scales = obj.getJSONArray("scales");
+            arps = obj.getJSONArray("arps");
+
+            for(int i=0; i<scales.length(); ++i){
+                obj = (JSONObject)scales.get(i);
+                name = obj.getString("name");
+                hint = obj.getString("hint");
+                keys = obj.getJSONArray("keys");
+                exerciseList = allScales.get(name);
+
+                for(int key=0; key<keys.length(); ++key){
+                    ex = new Exercise(keys.getString(key), name, Exercise.TYPE_SCALE, hint);
+                    if(exerciseList.contains(ex)){
+                        int index = exerciseList.indexOf(ex);
+                        m_selectableExerciseData.addExercise(exerciseList.get(index));
+                    }
+
+
+                    //m_selectableExerciseData.addExercise(ex);
+                }
+            }
+
+            for(int i=0; i<arps.length(); ++i) {
+                obj = (JSONObject) arps.get(i);
+                name = obj.getString("name");
+                hint = obj.getString("hint");
+                keys = obj.getJSONArray("keys");
+                exerciseList = allArps.get(name);
+
+                for (int key = 0; key < keys.length(); ++key) {
+                    ex = new Exercise(keys.getString(key), name, Exercise.TYPE_ARPEGGIO, hint);
+                    if(exerciseList.contains(ex)){
+                        int index = exerciseList.indexOf(ex);
+                        m_selectableExerciseData.addExercise(exerciseList.get(index));
+                    }
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setExerciseCheckboxLink(Exercise ex, CheckBox check){
         m_checkboxExerciseMap.put(check, ex);
@@ -94,7 +154,9 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     }
 
     public void setCheckBox(Exercise ex, boolean isChecked){
-        m_exerciseCheckBoxMap.get(ex).setChecked(isChecked);
+        CheckBox check = m_exerciseCheckBoxMap.get(ex);
+        if( check != null)
+            check.setChecked(isChecked);
     }
 
 }
