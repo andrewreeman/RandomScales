@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -299,11 +300,19 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 //        m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON("presetName"));
         //TODO check preset file integrity
     }
-
+    //TODO pass preset file name to Main then back to Presets to select correct preset on init.
+    //TODO * is invalid for preset input
+    //TODO if preset is modified then append its name with * this is temporary
+    //TODO save last used preset on close
     public void inputPresetNameFinished(String newPreset){
-        if(!m_presetReadWriter.hasPreset(newPreset)){
-            m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
 
+        if(!m_presetReadWriter.doesPresetExist(newPreset)){
+            m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
+        }
+        else{
+            Toast.makeText(this, "Could not create new preset as " + newPreset + " already exists.", Toast.LENGTH_LONG).show();
+            //TODO option to overwrite...
+            // TODO set text hint in normal SavePreset as current preset
         }
     }
 

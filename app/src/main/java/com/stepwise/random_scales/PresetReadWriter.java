@@ -79,10 +79,9 @@ public class PresetReadWriter {
         return new JSONObject();
     }
 
-    public Boolean hasPreset(String preset){
+    public Boolean doesPresetExist(String preset){
         //TODO check for if preset exists
-
-        return false;
+        return getPresetNames().contains(preset);
     }
 
     public void savePreset(Context context, JSONObject newPreset) {
