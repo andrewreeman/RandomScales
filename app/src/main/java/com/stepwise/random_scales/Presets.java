@@ -5,7 +5,6 @@ package com.stepwise.random_scales;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -37,7 +36,6 @@ import java.util.HashMap;
 public class Presets extends Activity implements AdapterView.OnItemSelectedListener{
 
     private SelectableExercises_Data m_selectableExercises;
-    //private long m_idSelectedPresetType;
     private int m_selectedType;
     private JSONObject m_presets;
 
@@ -57,34 +55,21 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         }
         else{
             m_isCheckBoxTableBuilt = false;
-            //m_selectableExercises = new SelectableExercises_Data();
             m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
             fillAllScalesAndArps();
-            initPresets();
-            //m_selectableExercises = initFromIntent(getIntent());
+
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
-
-
-            //m_idSelectedPresetType = spinner.getSelectedItemId();
 
             Spinner spinner  = (Spinner)findViewById(R.id.scaleOrArp);
             spinner.setOnItemSelectedListener(this);
             Button toggleClear = (Button)findViewById(R.id.clearChecks);
-            toggleClear.setTag(true);
+            toggleClear.setTag(true); //TODO give private finals (or const) for this. true is not clear... what is it true for
             m_selectedType = Exercise.TYPE_SCALE;
+
+            initPresets();
             initPresetSpinner();
         }
-    }
-
-    protected void onStart(){
-        super.onStart();
-/*      Dynamic creation of buttons.
-        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.presetFrame);
-        Button button = new Button(this);
-        button.setText("This is a test");
-        frameLayout.addView(button); */
-
     }
 
     @Override
@@ -346,7 +331,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         setResult(RESULT_OK, intent);
         finish();
     }
-
+//TODO change to JSONObject PresetManager.getPreset { return JSONOBJECT(preset...)}   and m_exercise...uses this
     private void setPreset(String presetName){
         try {
             JSONArray presets = m_presets.getJSONArray("presets");
