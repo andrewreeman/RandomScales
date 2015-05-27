@@ -15,20 +15,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
+import org.json.JSONException;
+
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
     private SelectableExercises_Data m_selectableExercises;
     private int m_selectedType;
-    private JSONObject m_presets;
+//    private JSONObject m_presets;
 
     //TODO less of a monster class
 
@@ -46,29 +45,34 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     private HashMap<String, ArrayList<Exercise>> m_allArps;
     private Boolean m_isCheckBoxTableBuilt;
 
+    private PresetReadWriter m_presetReadWriter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_presets);
-        if(savedInstanceState != null) {
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_presets);
+            if (savedInstanceState != null) {
 
+            } else {
+                m_isCheckBoxTableBuilt = false;
+                m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
+                fillAllScalesAndArps();
+
+                m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
+                m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
+
+                Spinner spinner = (Spinner) findViewById(R.id.scaleOrArp);
+                spinner.setOnItemSelectedListener(this);
+                Button toggleClear = (Button) findViewById(R.id.clearChecks);
+                toggleClear.setTag(true); //TODO give private finals (or const) for this. true is not clear... what is it true for
+                m_selectedType = Exercise.TYPE_SCALE;
+                m_presetReadWriter = new PresetReadWriter(this, getString(R.string.com_stepwise_random_scales_PresetFile));
+                initPresetSpinner();
+            }
         }
-        else{
-            m_isCheckBoxTableBuilt = false;
-            m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
-            fillAllScalesAndArps();
-
-            m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
-            m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
-
-            Spinner spinner  = (Spinner)findViewById(R.id.scaleOrArp);
-            spinner.setOnItemSelectedListener(this);
-            Button toggleClear = (Button)findViewById(R.id.clearChecks);
-            toggleClear.setTag(true); //TODO give private finals (or const) for this. true is not clear... what is it true for
-            m_selectedType = Exercise.TYPE_SCALE;
-
-            initPresets();
-            initPresetSpinner();
+        catch(JSONException e) {
+            Log.d("onCreate", "JSON error:" + e.toString());
         }
     }
 
@@ -83,7 +87,6 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             m_exerciseCheckBoxDelegate.clear();
             if (pos == 0) {
                 buildTable(m_allScales);
-                Log.d("onItemSelected", "Built table");
                 m_exerciseCheckBoxDelegate.updateScales();
                 m_selectedType = Exercise.TYPE_SCALE;
             } else {
@@ -94,8 +97,9 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         }
         else{
             ArrayAdapter<String> presetNames = (ArrayAdapter<String>) parent.getAdapter();
-            setPreset(presetNames.getItem(pos));
+            String presetName = presetNames.getItem(pos);
 
+            m_exerciseCheckBoxDelegate.setFromJSON(m_presetReadWriter.getPreset(presetName), m_allScales, m_allArps);
             if(m_isCheckBoxTableBuilt) {
                 if (m_selectedType == Exercise.TYPE_SCALE) {
                     m_exerciseCheckBoxDelegate.updateScales();
@@ -146,55 +150,10 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         return new SelectableExercises_Data();
     }*/
 
-    private void initPresets(){
-        StringBuffer inBuffer = new StringBuffer();
-        try {
-            String fileName = getString(R.string.com_stepwise_random_scales_scalePresetFile);
-            BufferedReader inFile = new BufferedReader(new InputStreamReader(openFileInput(fileName)));
-            String inString;
 
-            while ((inString = inFile.readLine()) != null) {
-                inBuffer.append(inString);
-            }
-            //TODO next have dialog for saving preset name then select from multiple names
-            m_presets = new JSONObject(inBuffer.toString());
-            inFile.close();
-            return;
-        }
-        catch (JSONException e) {
-            Log.d("initPresets", "Error reading JSON file: " + e.toString());
-        }
-        catch (FileNotFoundException e) {
-            Log.d("readPresetFile", "Error opening file: " + e.getMessage());
-        }catch (IOException e) {
-            Log.d("readPresetFile", "Error writing to pupil_details.json: " + e.getMessage());
-        }
-
-        //If anything fails.
-        m_presets = new JSONObject();
-        try {
-            m_presets.put("presets", new JSONArray());
-        } catch (JSONException e) {
-            Log.d("initPresets", "Error creating JSON file: " + e.toString());
-        }
-
-
-    }
-
-    private ArrayList<String> getPresetNames(){
-        ArrayList<String> presetNames = new ArrayList<>();
-
-        try {
-            JSONArray jsonNames = m_presets.getJSONArray("presets");
-            JSONObject obj;
-            for(int i=0; i<jsonNames.length(); ++i){
-                obj = (JSONObject)jsonNames.get(i);
-                presetNames.add( (String)obj.get("preset_name") );
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return presetNames;
+    @Override
+    public FileInputStream openFileInput(String name) throws FileNotFoundException {
+        return super.openFileInput(name);
     }
 
     private void initPresetSpinner(){
@@ -203,7 +162,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        arrayAdapter.addAll(getPresetNames());
+        arrayAdapter.addAll(m_presetReadWriter.getPresetNames());
 
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(this);
@@ -331,50 +290,25 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         setResult(RESULT_OK, intent);
         finish();
     }
-//TODO change to JSONObject PresetManager.getPreset { return JSONOBJECT(preset...)}   and m_exercise...uses this
-    private void setPreset(String presetName){
-        try {
-            JSONArray presets = m_presets.getJSONArray("presets");
-            for(int i=0; i<presets.length(); ++i){
-                JSONObject obj = (JSONObject)presets.get(i);
-                if( obj.getString("preset_name").equals(presetName) ) {
-                    m_exerciseCheckBoxDelegate.setFromJSON(obj, m_allScales, m_allArps);
-                    return;
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void onSavePresetClicked(View v) {
-        try{
-            JSONObject currentPreset = m_selectableExercises.toJSON("presetName");
-            JSONArray presets = m_presets.getJSONArray("presets");
+        InputPresetNameDialogFragment dialogFrag = new InputPresetNameDialogFragment();
 
-            //TODO check if preset exists with that name
-            presets.put(currentPreset);
-
-            m_presets.put("presets", presets);
-
-            FileOutputStream fileOutputStream = openFileOutput(getString(R.string.com_stepwise_random_scales_scalePresetFile), MODE_PRIVATE);
-            fileOutputStream.write((m_presets.toString() + "\n").getBytes());
-            fileOutputStream.close();
-        }
-        catch(FileNotFoundException e){
-            Log.d("onSavePresetClicked", "Error opening file: " + e.getMessage());
-        }
-        catch (IOException e){
-            Log.d("onSavePresetClicked", "Error writing to pupil_details.json: " + e.getMessage());
-        } catch (JSONException e) {
-            Log.d("onSavePresetClicked", "Error parsing JSON file" + e.getMessage());
-        }
-
+        dialogFrag.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
+//        m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON("presetName"));
         //TODO check preset file integrity
     }
 
+    public void inputPresetNameFinished(String newPreset){
+        if(!m_presetReadWriter.hasPreset(newPreset)){
+            m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
+
+        }
+    }
+
     public void deleteFile(View v){
-        deleteFile(getString(R.string.com_stepwise_random_scales_scalePresetFile));
+        deleteFile(getString(R.string.com_stepwise_random_scales_PresetFile));
     }
 
     public void onClearClicked(View v){
@@ -387,57 +321,5 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             m_exerciseCheckBoxDelegate.selectAllCheckBoxes();
             v.setTag(true);
         }
-
-
-
-
-        //m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
-
     }
-
 }
-         /*TODO move this over to app. exerciseList class has a scalesTOJSON and arpeggiosTOJSON methods
-
-
-
-        JSONArray scalesToJSON(){
-            return exerciseListToJSON(m_scales);
-        }
-        JSONArray arpsToJSON(){
-            return exerciseListToJSON(m_arps);
-        }
-
-        JSONArray exerciseListToJSON(ArrayList<Exercises> exList){
-            Map<String, JSONObject> tonalityToExerciseMap = new ...
-
-            for(Exercise ex : exList){
-
-                // new tonality
-                if(!tonalityToExerciseMap.containsKey(ex.name){
-                    JSONObject newTonalityData = new JSONObject();
-                     newTonalityData.put("name", ex.name);
-                     newTonalityData.put("hint", ex.hint);
-                     newTonalityData.put("keys", new JSONArray());
-                     tonalityToExerciseMap.put(ex.name, newTonalityData);
-                }
-
-                //append to keys
-                JSONArray tonalityData = tonalityToExerciseMap.get(ex.name);
-                tonalityData.add(ex.key);
-                //IF not a pointer
-                tonalityToExerciseMap.put(ex.name, tonalityData);
-            }
-
-            JSONArray exerciseList = new JSONArray();
-
-            for(JSONObject tonality : tonalityToExerciseMap.values()){
-                exerciseList.put(tonality);
-            }
-
-            return exerciseList;
-
-        }
-    } */
-
-
-

@@ -57,9 +57,10 @@
     <string name="title_activity_presets">Presets</string>
     <string name="presets">Presets</string>
     <string name="action_settings">Settings</string>
-    <string name="com.stepwise.random_scales.scalePresetFile">scales_presets.json</string>
+    <string name="com.stepwise.random_scales.PresetFile">presets.json</string>
     <string name="com.stepwise.random_scales.presetList">com.stepwise.random_scales.presetList</string>
-    <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">clearOrAllButtonState</string>
+    <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">com.stepwise.rand_scales.clearOrAllButtonState</string>
+    <string name="com.stepwise.random_scales.InputPresetNameDialog">com.stepwise.rand_scales.inputPresetNameDialog</string>
     <string-array name="spinnerExerciseTypes">
         <item >Scales</item>
         <item >Arpeggios</item>
