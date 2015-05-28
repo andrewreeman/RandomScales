@@ -294,24 +294,26 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
 
     public void onSavePresetClicked(View v) {
-        InputPresetNameDialogFragment dialogFrag = new InputPresetNameDialogFragment();
+        InputPresetNameDialogFragment inputDialog = new InputPresetNameDialogFragment();
 
-        dialogFrag.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
-//        m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON("presetName"));
+        inputDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
         //TODO check preset file integrity
     }
     //TODO pass preset file name to Main then back to Presets to select correct preset on init.
     //TODO * is invalid for preset input
     //TODO if preset is modified then append its name with * this is temporary
     //TODO save last used preset on close
-    public void inputPresetNameFinished(String newPreset){
+    //TODO define overwrite types...
 
-        if(!m_presetReadWriter.doesPresetExist(newPreset)){
+    public void inputPresetNameFinished(String newPreset, Boolean overwrite){
+
+        if(overwrite || !m_presetReadWriter.doesPresetExist(newPreset)){
             m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
         }
         else{
-            Toast.makeText(this, "Could not create new preset as " + newPreset + " already exists.", Toast.LENGTH_LONG).show();
-            //TODO option to overwrite...
+            OverwritePresetDialogFragment overwriteDialog = new OverwritePresetDialogFragment();
+            overwriteDialog.setNewPresetName(newPreset);
+            overwriteDialog.show(getFragmentManager(), "Overwrite");
             // TODO set text hint in normal SavePreset as current preset
         }
     }

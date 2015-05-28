@@ -55,6 +55,7 @@ public class PresetReadWriter {
             JSONObject obj;
             for (int i = 0; i < jsonNames.length(); ++i) {
                 obj = (JSONObject) jsonNames.get(i);
+                //TODO do not use literals
                 presetNames.add((String) obj.get("preset_name"));
             }
         } catch (JSONException e) {
@@ -83,14 +84,17 @@ public class PresetReadWriter {
         //TODO check for if preset exists
         return getPresetNames().contains(preset);
     }
-
+//TODO change order of scales and arpeggios
     public void savePreset(Context context, JSONObject newPreset) {
         try {
             JSONArray presets = m_presets.getJSONArray("presets");
-
-            //TODO check if preset exists with that name
-            presets.put(newPreset);
-
+            String presetName = newPreset.getString("preset_name");
+            if( doesPresetExist(presetName) ){
+                presets = replacePreset(newPreset, presets);
+            }
+            else{
+                presets.put(newPreset);
+            }
             m_presets.put("presets", presets);
 
             FileOutputStream fileOutputStream = context.openFileOutput(m_fileName, Context.MODE_PRIVATE);
@@ -105,8 +109,19 @@ public class PresetReadWriter {
         }
     }
 
-    public void overwritePreset(JSONObject preset){
+    public JSONArray replacePreset(JSONObject newPreset, JSONArray presets) throws JSONException {
+        JSONArray newPresets = new JSONArray();
+        JSONObject obj;
+        String newPresetName = newPreset.getString("preset_name");
 
+        for (int i = 0; i < presets.length(); ++i) {
+            obj = presets.getJSONObject(i);
+            if(obj.getString("preset_name").equals(newPresetName)){
+                obj = newPreset;
+            }
+            newPresets.put(obj);
+        }
+        return newPresets;
     }
 
 }
