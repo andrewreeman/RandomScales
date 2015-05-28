@@ -37,20 +37,19 @@ public class PresetReadWriter {
         }
         catch (FileNotFoundException e){
             m_presets = new JSONObject();
-            m_presets.put("presets", new JSONArray());
+            m_presets.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets), new JSONArray());
             Log.d("PresetReadWriter()", "Error finding file: " + e.toString());
         }
     }
     public ArrayList<String> getPresetNames() {
         ArrayList<String> presetNames = new ArrayList<>();
-        
+
         try {
-            JSONArray jsonNames = m_presets.getJSONArray("presets");
+            JSONArray jsonNames = m_presets.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets));
             JSONObject obj;
             for (int i = 0; i < jsonNames.length(); ++i) {
                 obj = (JSONObject) jsonNames.get(i);
-                //TODO do not use literals
-                presetNames.add((String) obj.get("preset_name"));
+                presetNames.add((String) obj.get(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name)));
             }
         } catch (JSONException e) {
             Log.d("PresetReadWriter", "JSONException in getPresetNames: " + e.getMessage());
@@ -60,10 +59,10 @@ public class PresetReadWriter {
 
     public JSONObject getPreset(String presetName){
         try {
-            JSONArray presets = m_presets.getJSONArray("presets");
+            JSONArray presets = m_presets.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets));
             for(int i=0; i<presets.length(); ++i){
                 JSONObject obj = (JSONObject)presets.get(i);
-                if( obj.getString("preset_name").equals(presetName) ){
+                if( obj.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name)).equals(presetName) ){
                     return obj;
                 }
             }
@@ -79,15 +78,15 @@ public class PresetReadWriter {
 //TODO change order of scales and arpeggios
     public void savePreset(Context context, JSONObject newPreset) {
         try {
-            JSONArray presets = m_presets.getJSONArray("presets");
-            String presetName = newPreset.getString("preset_name");
+            JSONArray presets = m_presets.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets));
+            String presetName = newPreset.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name));
             if( doesPresetExist(presetName) ){
                 presets = replacePreset(newPreset, presets);
             }
             else{
                 presets.put(newPreset);
             }
-            m_presets.put("presets", presets);
+            m_presets.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets), presets);
 
             FileOutputStream fileOutputStream = context.openFileOutput(m_fileName, Context.MODE_PRIVATE);
             fileOutputStream.write((m_presets.toString() + "\n").getBytes());
@@ -104,11 +103,11 @@ public class PresetReadWriter {
     public JSONArray replacePreset(JSONObject newPreset, JSONArray presets) throws JSONException {
         JSONArray newPresets = new JSONArray();
         JSONObject obj;
-        String newPresetName = newPreset.getString("preset_name");
+        String newPresetName = newPreset.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name));
 
         for (int i = 0; i < presets.length(); ++i) {
             obj = presets.getJSONObject(i);
-            if(obj.getString("preset_name").equals(newPresetName)){
+            if(obj.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name)).equals(newPresetName)){
                 obj = newPreset;
             }
             newPresets.put(obj);

@@ -62,9 +62,9 @@ public class SelectableExercises_Data implements Parcelable{
         JSONObject exercises = new JSONObject();
         //TODO don't use hardcoded strings
         try {
-            exercises.put("preset_name", presetName);
-            exercises.put("scales", exerciseListToJson(Scales));
-            exercises.put("arps", exerciseListToJson(Arpeggios));
+            exercises.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name), presetName);
+            exercises.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_scales), exerciseListToJson(Scales));
+            exercises.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_arps), exerciseListToJson(Arpeggios));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -76,19 +76,19 @@ public class SelectableExercises_Data implements Parcelable{
         JSONArray exercises = new JSONArray();
         try{
             for (Exercise ex : exList ) {
+                //TODO comment here to explain
                 if (!tonalityToExerciseMap.containsKey(ex.getName())) {
                     JSONObject newTonalityData = new JSONObject();
 
-                    newTonalityData.put("name", ex.getName());
-                    newTonalityData.put("hint", ex.getHint());
-                    newTonalityData.put("keys", new JSONArray());
+                    newTonalityData.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_name), ex.getName());
+                    newTonalityData.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_hint), ex.getHint());
+                    newTonalityData.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_keyArray), new JSONArray());
                     tonalityToExerciseMap.put(ex.getName(), newTonalityData);
                 }
                 JSONObject tonalityData = tonalityToExerciseMap.get(ex.getName());
-                JSONArray tonalityKeys = tonalityData.getJSONArray("keys");
+                JSONArray tonalityKeys = tonalityData.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_keyArray));
                 tonalityKeys.put(ex.getKey());
             }
-
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -121,5 +121,5 @@ public class SelectableExercises_Data implements Parcelable{
             return new SelectableExercises_Data[size];
         }
     };
-
+//TODO when new presert saved. update preset spinner with new name
 }

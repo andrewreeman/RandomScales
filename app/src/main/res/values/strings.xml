@@ -62,6 +62,7 @@
     <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">com.stepwise.rand_scales.clearOrAllButtonState</string>
     <string name="com.stepwise.random_scales.InputPresetNameDialog">com.stepwise.rand_scales.inputPresetNameDialog</string>
     <string name="com.stepwise.random_scales.JSONKeys.preset_name">com.stepwise.random_scales.JSONKeys.preset_name</string>
+    <string name="com.stepwise.random_scales.JSONKeys.keyArray">com.stepwise.random_scales.JSONKeys.keyArray</string>
     <string name="com.stepwise.random_scales.JSONKeys.key">com.stepwise.random_scales.JSONKeys.key</string>
     <string name="com.stepwise.random_scales.JSONKeys.type">com.stepwise.random_scales.JSONKeys.type</string>
     <string name="com.stepwise.random_scales.JSONKeys.hint">com.stepwise.random_scales.JSONKeys.hint</string>

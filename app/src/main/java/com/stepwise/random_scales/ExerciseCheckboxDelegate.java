@@ -33,8 +33,8 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         try{
             deselectAllCheckBoxes();
             m_selectableExerciseData.clear();
-            scales = obj.getJSONArray("scales");
-            arps = obj.getJSONArray("arps");
+            scales = obj.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_scales));
+            arps = obj.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_arps));
             setExerciseFromJSONArray(scales, allScales, Exercise.TYPE_SCALE);
             setExerciseFromJSONArray(arps, allArps, Exercise.TYPE_ARPEGGIO);
         } catch (JSONException e) {
@@ -114,9 +114,9 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
         for(int i=0; i<array.length(); ++i){
             obj = (JSONObject)array.get(i);
-            name = obj.getString("name");
-            hint = obj.getString("hint");
-            keys = obj.getJSONArray("keys");
+            name = obj.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_name));
+            hint = obj.getString(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_hint));
+            keys = obj.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_keyArray));
 
             if(!allExercisesOfType.containsKey(name))
                 throw new AssertionError("Error in ExerciseCheckboxDelegate.setExerciseFromJSONArray: " + name + " is not included in allExercisesOfType");
