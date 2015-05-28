@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com.stepwise.random_scales.presetList">com.stepwise.random_scales.presetList</string>
+    <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">com.stepwise.rand_scales.clearOrAllButtonState</string>
+    <string name="com.stepwise.random_scales.InputPresetNameDialog">com.stepwise.rand_scales.inputPresetNameDialog</string>
+    <string name="com.stepwise.random_scales.OverwriteDialog">com.stepwise.rand_scales.OverwriteDialog</string>
+</resources>

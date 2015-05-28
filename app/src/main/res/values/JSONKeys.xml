@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com.stepwise.random_scales.JSONKeys.preset_name">com.stepwise.random_scales.JSONKeys.preset_name</string>
+    <string name="com.stepwise.random_scales.JSONKeys.keyArray">com.stepwise.random_scales.JSONKeys.keyArray</string>
+    <string name="com.stepwise.random_scales.JSONKeys.key">com.stepwise.random_scales.JSONKeys.key</string>
+    <string name="com.stepwise.random_scales.JSONKeys.type">com.stepwise.random_scales.JSONKeys.type</string>
+    <string name="com.stepwise.random_scales.JSONKeys.hint">com.stepwise.random_scales.JSONKeys.hint</string>
+    <string name="com.stepwise.random_scales.JSONKeys.name">com.stepwise.random_scales.JSONKeys.name</string>
+    <string name="com.stepwise.random_scales.JSONKeys.presets">com.stepwise.random_scales.JSONKeys.presets</string>
+    <string name="com.stepwise.random_scales.JSONKeys.scales">com.stepwise.random_scales.JSONKeys.scales</string>
+    <string name="com.stepwise.random_scales.JSONKeys.arps">com.stepwise.random_scales.JSONKeys.arps</string>
+</resources>

@@ -16,11 +16,16 @@ import android.widget.Toast;
 public class InputPresetNameDialogFragment extends DialogFragment implements Dialog.OnClickListener {
 
     private String m_newPreset;
+    private String m_hint;
     private EditText m_editText;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceBundle){
         m_editText = new EditText(getActivity());
+
+        if(m_hint != null){
+            m_editText.setText(m_hint);
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Preset name");
@@ -48,6 +53,10 @@ public class InputPresetNameDialogFragment extends DialogFragment implements Dia
         catch(AssertionError e){
             Log.d("Error","InputPresetNameDialogFragment.onClick " + e.getMessage());
         }
+    }
+
+    public void setHint(String hint){
+        m_hint = hint;
     }
 
 }

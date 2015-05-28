@@ -1,5 +1,5 @@
 //TODO if preset is modified then append its name with * this is temporary
-// TODO set text hint in normal SavePreset as current preset
+
 
 package com.stepwise.random_scales;
 
@@ -21,7 +21,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import org.json.JSONException;
 
@@ -42,7 +41,6 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     private Boolean m_isCheckBoxTableBuilt;
     private PresetReadWriter m_presetReadWriter;
 
-//TODO organise strings in different files
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -261,7 +259,10 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
 
     public void onSavePresetClicked(View v) {
+        Spinner spinner = (Spinner)findViewById(R.id.presets);
+        String selected = (String)spinner.getSelectedItem();
         InputPresetNameDialogFragment inputDialog = new InputPresetNameDialogFragment();
+        inputDialog.setHint(selected);
         inputDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
 
     }
@@ -274,7 +275,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         else{
             OverwritePresetDialogFragment overwriteDialog = new OverwritePresetDialogFragment();
             overwriteDialog.setNewPresetName(newPreset);
-            overwriteDialog.show(getFragmentManager(), "Overwrite");
+            overwriteDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_OverwriteDialog));
         }
     }
 

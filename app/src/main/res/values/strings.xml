@@ -1,77 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Random Scales</string>
-    <string-array name="Notes">
-        <item >C</item>
-        <item >C#</item>
-        <item >D</item>
-        <item >Eb</item>
-        <item >E</item>
-        <item >F</item>
-        <item >F#</item>
-        <item >G</item>
-        <item >Ab</item>
-        <item >A</item>
-        <item >Bb</item>
-        <item >B</item>
-    </string-array>
     <string name="scale">Scale:</string>
     <string name="scaleGenButton">Generate random scale</string>
-    <string-array name="Scales">
-        <item>Major</item>
-        <item >Melodic Minor</item>
-        <item >Harmonic Minor</item>
-        <item >Natural Minor</item>
-        <item >Major Pentatonic</item>
-        <item >Minor Pentatonic</item>
-        <item >Chromatic</item>
-        <item >Major Blues</item>
-        <item >Minor Blues</item>
-        <item>Phrygian</item>
-        <item>Lydian</item>
-        <item>Mixolydian</item>
-        <item>Locrian</item>
-        <item >Dorian</item>
-        <item >Persian</item>
-        <item >Whole-Half Diminished</item>
-        <item >Half-Whole Diminished</item>
-        <item >Whole-Tone</item>
-        <item >Dominant Bebop</item>
-        <item >Minor Bebop</item>
-        <item >Major Bebop</item>
-        <item >Altered</item>
-
-    </string-array>
     <string name="arpeggio">Arpeggio: </string>
     <string name="arpGenButton">Generate random arpeggio</string>
-    <string-array name="Arpeggios">
-        <item >Major</item>
-        <item >Minor</item>
-        <item >Diminished</item>
-        <item >Augmented</item>
-        <item >Dominant 7th</item>
-        <item >Major 7th</item>
-        <item >Minor 7th</item>
-        <item >Diminished 7th</item>
-    </string-array>
     <string name="title_activity_presets">Presets</string>
     <string name="presets">Presets</string>
     <string name="action_settings">Settings</string>
     <string name="com.stepwise.random_scales.PresetFile">presets.json</string>
-    <string name="com.stepwise.random_scales.presetList">com.stepwise.random_scales.presetList</string>
-    <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">com.stepwise.rand_scales.clearOrAllButtonState</string>
-    <string name="com.stepwise.random_scales.InputPresetNameDialog">com.stepwise.rand_scales.inputPresetNameDialog</string>
-    <string name="com.stepwise.random_scales.JSONKeys.preset_name">com.stepwise.random_scales.JSONKeys.preset_name</string>
-    <string name="com.stepwise.random_scales.JSONKeys.keyArray">com.stepwise.random_scales.JSONKeys.keyArray</string>
-    <string name="com.stepwise.random_scales.JSONKeys.key">com.stepwise.random_scales.JSONKeys.key</string>
-    <string name="com.stepwise.random_scales.JSONKeys.type">com.stepwise.random_scales.JSONKeys.type</string>
-    <string name="com.stepwise.random_scales.JSONKeys.hint">com.stepwise.random_scales.JSONKeys.hint</string>
-    <string name="com.stepwise.random_scales.JSONKeys.name">com.stepwise.random_scales.JSONKeys.name</string>
-    <string name="com.stepwise.random_scales.JSONKeys.presets">com.stepwise.random_scales.JSONKeys.presets</string>
-    <string name="com.stepwise.random_scales.JSONKeys.scales">com.stepwise.random_scales.JSONKeys.scales</string>
-    <string name="com.stepwise.random_scales.JSONKeys.arps">com.stepwise.random_scales.JSONKeys.arps</string>
-
     <string-array name="spinnerExerciseTypes">
         <item >Scales</item>
         <item >Arpeggios</item>
