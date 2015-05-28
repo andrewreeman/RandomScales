@@ -60,7 +60,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             Spinner spinner = (Spinner) findViewById(R.id.scaleOrArp);
             spinner.setOnItemSelectedListener(this);
             Button toggleClear = (Button) findViewById(R.id.clearChecks);
-            toggleClear.setTag(CHECKALL_CHECKBOXES); //TODO give private finals (or const) for this. true is not clear... what is it true for
+            toggleClear.setTag(CHECKALL_CHECKBOXES);
             m_selectedType = Exercise.TYPE_SCALE;
 
             try{
@@ -271,6 +271,9 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
         if(overwrite || !m_presetReadWriter.doesPresetExist(newPreset)){
             m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
+            Spinner spinner = (Spinner)findViewById(R.id.presets);
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinner.getAdapter();
+            adapter.add(newPreset);
         }
         else{
             OverwritePresetDialogFragment overwriteDialog = new OverwritePresetDialogFragment();

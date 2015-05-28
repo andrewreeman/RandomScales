@@ -71,11 +71,11 @@ public class SelectableExercises_Data implements Parcelable{
     }
 
     private JSONArray exerciseListToJson(ArrayList<Exercise> exList){
+        //tonalityToExerciseMap maps the tonality names to the exercises.
         HashMap<String, JSONObject> tonalityToExerciseMap = new HashMap<>();
         JSONArray exercises = new JSONArray();
         try{
             for (Exercise ex : exList ) {
-                //TODO comment here to explain
                 if (!tonalityToExerciseMap.containsKey(ex.getName())) {
                     JSONObject newTonalityData = new JSONObject();
 
@@ -120,5 +120,4 @@ public class SelectableExercises_Data implements Parcelable{
             return new SelectableExercises_Data[size];
         }
     };
-//TODO when new presert saved. update preset spinner with new name
 }
