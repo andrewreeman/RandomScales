@@ -1,4 +1,4 @@
-//TODO if preset is modified then append its name with * this is temporary
+
 
 
 package com.stepwise.random_scales;
@@ -56,6 +56,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
             m_exerciseCheckBoxDelegate.setModel(m_selectableExercises);
+            m_exerciseCheckBoxDelegate.setCheckboxChangedListener(this);
 
             Spinner spinner = (Spinner) findViewById(R.id.scaleOrArp);
             spinner.setOnItemSelectedListener(this);
@@ -80,6 +81,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
+
         if(parent.getId() == R.id.scaleOrArp) {
             TableLayout exerciseTable = (TableLayout)findViewById(R.id.Presets_TableLayout);
             Button clearCheckToggle = (Button)findViewById(R.id.clearChecks);
@@ -100,9 +102,8 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         }
         else{
             if(m_presetReadWriter != null) {
-                ArrayAdapter<String> presetNames = (ArrayAdapter<String>) parent.getAdapter();
-                String presetName = presetNames.getItem(pos);
 
+                String presetName = (String)parent.getSelectedItem();
                 m_exerciseCheckBoxDelegate.setFromJSON(m_presetReadWriter.getPreset(presetName), m_allScales, m_allArps);
                 if (m_isCheckBoxTableBuilt) {
                     if (m_selectedType == Exercise.TYPE_SCALE) {
@@ -138,6 +139,65 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         return super.onOptionsItemSelected(item);
     }
 
+   @Override
+    public void onBackPressed(){
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+
+    public void onSavePresetClicked(View v) {
+        Spinner spinner = (Spinner)findViewById(R.id.presets);
+        String selected = (String)spinner.getSelectedItem();
+        InputPresetNameDialogFragment inputDialog = new InputPresetNameDialogFragment();
+        inputDialog.setHint(selected);
+        inputDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
+
+    }
+
+    public void inputPresetNameFinished(String newPreset, Boolean overwrite) throws AssertionError{
+
+        if(overwrite || !m_presetReadWriter.doesPresetExist(newPreset)){
+            m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
+            Spinner spinner = (Spinner)findViewById(R.id.presets);
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinner.getAdapter();
+            adapter.add(newPreset);
+        }
+        else{
+            OverwritePresetDialogFragment overwriteDialog = new OverwritePresetDialogFragment();
+            overwriteDialog.setNewPresetName(newPreset);
+            overwriteDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_OverwriteDialog));
+        }
+    }
+
+    public void onClearClicked(View v){
+        Boolean ClearState = (Boolean)v.getTag();
+        Button button = (Button)v;
+        if(ClearState == CLEAR_CHECKBOXES) {
+            m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
+            button.setTag(CHECKALL_CHECKBOXES);
+            button.setText("All");
+        }
+        else{
+            m_exerciseCheckBoxDelegate.selectAllCheckBoxes();
+            button.setTag(CLEAR_CHECKBOXES);
+            button.setText("Clear");
+        }
+    }
+
+    public void onCheckBoxChanged(){
+        Spinner spinner = (Spinner)findViewById(R.id.presets);
+        String currentItem = (String)spinner.getSelectedItem();
+        if(currentItem.contains("*")) return;
+        int itemPos = spinner.getSelectedItemPosition();
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinner.getAdapter();
+
+        stripPresetsWithStars(adapter);
+        adapter.insert(currentItem + "*", itemPos);
+    }
+
     private void initPresetSpinner(){
         Spinner spinner = (Spinner)findViewById(R.id.presets);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -151,7 +211,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     private void fillAllScalesAndArps(){
         String[] notesString = getResources().getStringArray(R.array.Notes);
         String[] scaleTypes = getResources().getStringArray(R.array.Scales);
-       String[] arpTypes = getResources().getStringArray(R.array.Arpeggios);
+        String[] arpTypes = getResources().getStringArray(R.array.Arpeggios);
         ArrayList<Exercise> selectedScales = m_selectableExercises.getScales();
         ArrayList<Exercise> selectedArps = m_selectableExercises.getArpeggios();
         m_allScales = new LinkedHashMap<>();
@@ -216,7 +276,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         m_isCheckBoxTableBuilt = true;
     }
 
-   private void buildTableHeader(String largestString){
+    private void buildTableHeader(String largestString){
 
         ArrayList<String> notesString = new ArrayList<>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
         TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);
@@ -249,51 +309,14 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         headerTable.addView(emptyRow);
     }
 
-    @Override
-    public void onBackPressed(){
-        Intent intent = new Intent();
-        intent.putExtra(getString(R.string.com_stepwise_random_scales_presetList), m_selectableExercises);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
-
-    public void onSavePresetClicked(View v) {
-        Spinner spinner = (Spinner)findViewById(R.id.presets);
-        String selected = (String)spinner.getSelectedItem();
-        InputPresetNameDialogFragment inputDialog = new InputPresetNameDialogFragment();
-        inputDialog.setHint(selected);
-        inputDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_InputPresetNameDialog));
-
-    }
-
-    public void inputPresetNameFinished(String newPreset, Boolean overwrite) throws AssertionError{
-
-        if(overwrite || !m_presetReadWriter.doesPresetExist(newPreset)){
-            m_presetReadWriter.savePreset(this, m_selectableExercises.toJSON(newPreset));
-            Spinner spinner = (Spinner)findViewById(R.id.presets);
-            ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinner.getAdapter();
-            adapter.add(newPreset);
-        }
-        else{
-            OverwritePresetDialogFragment overwriteDialog = new OverwritePresetDialogFragment();
-            overwriteDialog.setNewPresetName(newPreset);
-            overwriteDialog.show(getFragmentManager(), getString(R.string.com_stepwise_random_scales_OverwriteDialog));
-        }
-    }
-
-    public void onClearClicked(View v){
-        Boolean ClearState = (Boolean)v.getTag();
-        Button button = (Button)v;
-        if(ClearState == CLEAR_CHECKBOXES) {
-            m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
-            button.setTag(CHECKALL_CHECKBOXES);
-            button.setText("All");
-        }
-        else{
-            m_exerciseCheckBoxDelegate.selectAllCheckBoxes();
-            button.setTag(CLEAR_CHECKBOXES);
-            button.setText("Clear");
+    private void stripPresetsWithStars(ArrayAdapter<String> adapter){
+        String preset;
+        for(int i=0; i<adapter.getCount(); ++i){
+            preset = adapter.getItem(i);
+            if(preset.contains("*")){
+                adapter.remove(preset);
+                return;
+            }
         }
     }
 }

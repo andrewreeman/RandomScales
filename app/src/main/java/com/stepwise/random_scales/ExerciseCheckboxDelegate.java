@@ -1,6 +1,5 @@
 package com.stepwise.random_scales;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -8,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +19,14 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     HashMap<CheckBox, Exercise> m_checkboxExerciseMap;
     HashMap<Exercise, CheckBox> m_exerciseCheckBoxMap;
     SelectableExercises_Data m_selectableExerciseData;
+    Presets m_checkboxChangedListener;
 
     public ExerciseCheckboxDelegate(){
         m_checkboxExerciseMap = new HashMap<>();
         m_exerciseCheckBoxMap = new HashMap<>();
     }
+
+    public void setCheckboxChangedListener(Presets context){ m_checkboxChangedListener = context;}
 
     public void setFromJSON(JSONObject obj, HashMap<String, ArrayList<Exercise>> allScales, HashMap<String, ArrayList<Exercise>> allArps){
         JSONArray scales;
@@ -95,6 +96,7 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
             m_selectableExerciseData.addExercise(ex);
         else
             m_selectableExerciseData.removeExercise(ex);
+        m_checkboxChangedListener.onCheckBoxChanged();
     }
 
     private void setExerciseFromJSONArray(JSONArray array, HashMap<String, ArrayList<Exercise>> allExercisesOfType, int type) throws JSONException{
