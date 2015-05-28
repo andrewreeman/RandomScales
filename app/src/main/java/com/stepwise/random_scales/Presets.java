@@ -1,5 +1,4 @@
 //TODO if preset is modified then append its name with * this is temporary
-//TODO define overwrite types...
 // TODO set text hint in normal SavePreset as current preset
 
 package com.stepwise.random_scales;
@@ -22,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.json.JSONException;
 
@@ -32,6 +32,8 @@ import java.util.LinkedHashMap;
 
 public class Presets extends Activity implements AdapterView.OnItemSelectedListener{
 
+    public static final Boolean CLEAR_CHECKBOXES = true;
+    public static final Boolean CHECKALL_CHECKBOXES = false;
     private SelectableExercises_Data m_selectableExercises;
     private int m_selectedType;
     private ExerciseCheckboxDelegate m_exerciseCheckBoxDelegate;
@@ -39,6 +41,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     private LinkedHashMap<String, ArrayList<Exercise>> m_allArps;
     private Boolean m_isCheckBoxTableBuilt;
     private PresetReadWriter m_presetReadWriter;
+
 //TODO organise strings in different files
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -59,7 +62,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             Spinner spinner = (Spinner) findViewById(R.id.scaleOrArp);
             spinner.setOnItemSelectedListener(this);
             Button toggleClear = (Button) findViewById(R.id.clearChecks);
-            toggleClear.setTag(true); //TODO give private finals (or const) for this. true is not clear... what is it true for
+            toggleClear.setTag(CHECKALL_CHECKBOXES); //TODO give private finals (or const) for this. true is not clear... what is it true for
             m_selectedType = Exercise.TYPE_SCALE;
 
             try{
@@ -80,7 +83,8 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id){
         if(parent.getId() == R.id.scaleOrArp) {
-            TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
+            TableLayout exerciseTable = (TableLayout)findViewById(R.id.Presets_TableLayout);
+            Button clearCheckToggle = (Button)findViewById(R.id.clearChecks);
             exerciseTable.removeAllViews();
 
             m_exerciseCheckBoxDelegate.clear();
@@ -93,6 +97,8 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
                 m_exerciseCheckBoxDelegate.updateArps();
                 m_selectedType = Exercise.TYPE_ARPEGGIO;
             }
+            clearCheckToggle.setTag(CLEAR_CHECKBOXES);
+            clearCheckToggle.setText("Clear");
         }
         else{
             if(m_presetReadWriter != null) {
@@ -273,14 +279,17 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     }
 
     public void onClearClicked(View v){
-        Boolean isClearState = (Boolean)v.getTag();
-        if(isClearState) {
+        Boolean ClearState = (Boolean)v.getTag();
+        Button button = (Button)v;
+        if(ClearState == CLEAR_CHECKBOXES) {
             m_exerciseCheckBoxDelegate.deselectAllCheckBoxes();
-            v.setTag(false);
+            button.setTag(CHECKALL_CHECKBOXES);
+            button.setText("All");
         }
         else{
             m_exerciseCheckBoxDelegate.selectAllCheckBoxes();
-            v.setTag(true);
+            button.setTag(CLEAR_CHECKBOXES);
+            button.setText("Clear");
         }
     }
 }

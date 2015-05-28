@@ -12,6 +12,7 @@ import android.widget.EditText;
  * Created by andy on 28/05/15.
  */
 public class OverwritePresetDialogFragment extends DialogFragment implements Dialog.OnClickListener{
+
     private String m_newPreset;
 
     public void setNewPresetName(String newPreset) throws AssertionError{
