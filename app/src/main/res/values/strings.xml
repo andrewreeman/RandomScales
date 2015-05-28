@@ -19,19 +19,20 @@
     <string name="scale">Scale:</string>
     <string name="scaleGenButton">Generate random scale</string>
     <string-array name="Scales">
-        <item>Dorian</item>
+        <item>Major</item>
+        <item >Melodic Minor</item>
+        <item >Harmonic Minor</item>
+        <item >Natural Minor</item>
+        <item >Major Pentatonic</item>
+        <item >Minor Pentatonic</item>
+        <item >Chromatic</item>
+        <item >Major Blues</item>
+        <item >Minor Blues</item>
         <item>Phrygian</item>
         <item>Lydian</item>
         <item>Mixolydian</item>
         <item>Locrian</item>
-        <item >Major</item>
-        <item >Natural Minor</item>
-        <item >Melodic Minor</item>
-        <item >Harmonic Minor</item>
-        <item >Major Pentatonic</item>
-        <item >Minor Pentatonic</item>
-        <item >Minor Blues</item>
-        <item >Chromatic</item>
+        <item >Dorian</item>
         <item >Persian</item>
         <item >Whole-Half Diminished</item>
         <item >Half-Whole Diminished</item>
@@ -40,7 +41,7 @@
         <item >Minor Bebop</item>
         <item >Major Bebop</item>
         <item >Altered</item>
-        <item >Major Blues</item>
+
     </string-array>
     <string name="arpeggio">Arpeggio: </string>
     <string name="arpGenButton">Generate random arpeggio</string>

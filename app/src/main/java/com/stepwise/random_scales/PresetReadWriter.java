@@ -75,7 +75,7 @@ public class PresetReadWriter {
     public Boolean doesPresetExist(String preset){
         return getPresetNames().contains(preset);
     }
-//TODO change order of scales and arpeggios
+
     public void savePreset(Context context, JSONObject newPreset) {
         try {
             JSONArray presets = m_presets.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_presets));

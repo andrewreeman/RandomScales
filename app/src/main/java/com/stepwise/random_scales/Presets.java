@@ -1,8 +1,4 @@
-//TODO check preset file integrity
-//TODO pass preset file name to Main then back to Presets to select correct preset on init.
-//TODO * is invalid for preset input
 //TODO if preset is modified then append its name with * this is temporary
-//TODO save last used preset on close
 //TODO define overwrite types...
 // TODO set text hint in normal SavePreset as current preset
 
@@ -32,15 +28,15 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Presets extends Activity implements AdapterView.OnItemSelectedListener{
 
     private SelectableExercises_Data m_selectableExercises;
     private int m_selectedType;
     private ExerciseCheckboxDelegate m_exerciseCheckBoxDelegate;
-    private HashMap<String, ArrayList<Exercise>> m_allScales;
-    private HashMap<String, ArrayList<Exercise>> m_allArps;
+    private LinkedHashMap<String, ArrayList<Exercise>> m_allScales; //HashMap does not preserve order. LinkedHashMap does
+    private LinkedHashMap<String, ArrayList<Exercise>> m_allArps;
     private Boolean m_isCheckBoxTableBuilt;
     private PresetReadWriter m_presetReadWriter;
 //TODO organise strings in different files
@@ -148,7 +144,44 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         spinner.setOnItemSelectedListener(this);
     }
 
-    private void buildTable(HashMap<String, ArrayList<Exercise>> allExercises){
+    private void fillAllScalesAndArps(){
+        String[] notesString = getResources().getStringArray(R.array.Notes);
+        String[] scaleTypes = getResources().getStringArray(R.array.Scales);
+       String[] arpTypes = getResources().getStringArray(R.array.Arpeggios);
+        ArrayList<Exercise> selectedScales = m_selectableExercises.getScales();
+        ArrayList<Exercise> selectedArps = m_selectableExercises.getArpeggios();
+        m_allScales = new LinkedHashMap<>();
+        m_allArps = new LinkedHashMap<>();
+
+        for(String scale : scaleTypes){
+            ArrayList<Exercise> exercises = new ArrayList<>();
+            for(String note : notesString) {
+                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
+                if(selectedScales.contains(ex)){
+                    int index = selectedScales.indexOf(ex);
+                    ex = selectedScales.get(index);
+                }
+                exercises.add(ex);
+            }
+            m_allScales.put(scale, exercises);
+        }
+
+        for(String arp : arpTypes){
+            ArrayList<Exercise> exercises = new ArrayList<>();
+            for(String note : notesString) {
+                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
+                if(selectedArps.contains(ex)){
+                    int index = selectedArps.indexOf(ex);
+                    ex = selectedArps.get(index);
+                }
+                exercises.add(ex);
+            }
+            m_allArps.put(arp, exercises);
+        }
+    }
+
+
+    private void buildTable(LinkedHashMap<String, ArrayList<Exercise>> allExercises){
         m_isCheckBoxTableBuilt = false;
         TableLayout exerciseTable = (TableLayout) findViewById(R.id.Presets_TableLayout);
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -179,42 +212,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         m_isCheckBoxTableBuilt = true;
     }
 
-    private void fillAllScalesAndArps(){
-        String[] notesString = getResources().getStringArray(R.array.Notes);
-        String[] scaleTypes = getResources().getStringArray(R.array.Scales);
-        String[] arpTypes = getResources().getStringArray(R.array.Arpeggios);
-        ArrayList<Exercise> selectedScales = m_selectableExercises.getScales();
-        ArrayList<Exercise> selectedArps = m_selectableExercises.getArpeggios();
-        m_allScales = new HashMap<>();
-        m_allArps = new HashMap<>();
-
-        for(String scale : scaleTypes){
-            ArrayList<Exercise> exercises = new ArrayList<>();
-            for(String note : notesString) {
-                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
-                if(selectedScales.contains(ex)){
-                    int index = selectedScales.indexOf(ex);
-                    ex = selectedScales.get(index);
-                }
-                exercises.add(ex);
-            }
-            m_allScales.put(scale, exercises);
-        }
-        for(String arp : arpTypes){
-            ArrayList<Exercise> exercises = new ArrayList<>();
-            for(String note : notesString) {
-                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
-                if(selectedArps.contains(ex)){
-                    int index = selectedArps.indexOf(ex);
-                    ex = selectedArps.get(index);
-                }
-                exercises.add(ex);
-            }
-            m_allArps.put(arp, exercises);
-        }
-    }
-
-    private void buildTableHeader(String largestString){
+   private void buildTableHeader(String largestString){
 
         ArrayList<String> notesString = new ArrayList<>( Arrays.asList( getResources().getStringArray(R.array.Notes)));
         TableLayout headerTable = (TableLayout)findViewById(R.id.Presets_Header);

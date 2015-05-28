@@ -60,7 +60,6 @@ public class SelectableExercises_Data implements Parcelable{
 
     public JSONObject toJSON(String presetName){
         JSONObject exercises = new JSONObject();
-        //TODO don't use hardcoded strings
         try {
             exercises.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_preset_name), presetName);
             exercises.put(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_scales), exerciseListToJson(Scales));

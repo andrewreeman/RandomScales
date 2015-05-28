@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by andy on 27/05/15.
@@ -36,6 +37,10 @@ public class InputPresetNameDialogFragment extends DialogFragment implements Dia
             if (which == Dialog.BUTTON_POSITIVE) {
                 m_newPreset = m_editText.getText().toString();
                 if (m_newPreset.isEmpty()) return;
+                if(m_newPreset.contains("*")){
+                    Toast.makeText(getActivity(), "Name cannot contain *", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Presets activity = (Presets) getActivity();
                 activity.inputPresetNameFinished(m_newPreset, false);
             }
