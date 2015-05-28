@@ -20,8 +20,7 @@ public class PresetReadWriter {
     private JSONObject m_presets;
     private String m_fileName;
 
-    public PresetReadWriter(Context context, String fileName) throws JSONException {
-        //TODO redo errors
+    public PresetReadWriter(Context context, String fileName) throws JSONException, IOException {
         StringBuffer inBuffer = new StringBuffer();
         try {
             m_fileName = fileName;
@@ -31,7 +30,6 @@ public class PresetReadWriter {
             while ((inString = inFile.readLine()) != null) {
                 inBuffer.append(inString);
             }
-            //TODO next have dialog for saving preset name then select from multiple names
             m_presets = new JSONObject(inBuffer.toString());
             inFile.close();
             return;
@@ -41,11 +39,6 @@ public class PresetReadWriter {
             m_presets.put("presets", new JSONArray());
             Log.d("PresetReadWriter()", "Error finding file: " + e.toString());
         }
-        catch (IOException e) {
-            Log.d("readPresetFile", "Error writing to pupil_details.json: " + e.getMessage());
-        }
-
-
     }
     public ArrayList<String> getPresetNames() {
         ArrayList<String> presetNames = new ArrayList<>();
@@ -59,13 +52,12 @@ public class PresetReadWriter {
                 presetNames.add((String) obj.get("preset_name"));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d("PresetReadWriter", "JSONException in getPresetNames: " + e.getMessage());
         }
         return presetNames;
     }
 
     public JSONObject getPreset(String presetName){
-        //TODO what if error
         try {
             JSONArray presets = m_presets.getJSONArray("presets");
             for(int i=0; i<presets.length(); ++i){
@@ -75,13 +67,12 @@ public class PresetReadWriter {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d("PresetReadWriter", "JSONException in getPreset: " + e.getMessage());
         }
         return new JSONObject();
     }
 
     public Boolean doesPresetExist(String preset){
-        //TODO check for if preset exists
         return getPresetNames().contains(preset);
     }
 //TODO change order of scales and arpeggios

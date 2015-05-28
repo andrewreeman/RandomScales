@@ -20,13 +20,13 @@ public class SelectableExercises_Data implements Parcelable{
     private ArrayList<Exercise> Arpeggios;
 
     public SelectableExercises_Data(){
-        Scales = new ArrayList<Exercise>();
-        Arpeggios = new ArrayList<Exercise>();
+        Scales = new ArrayList<>();
+        Arpeggios = new ArrayList<>();
     }
 
     public SelectableExercises_Data(Parcel source){
-        Scales = new ArrayList<Exercise>();
-        Arpeggios = new ArrayList<Exercise>();
+        Scales = new ArrayList<>();
+        Arpeggios = new ArrayList<>();
         source.readTypedList(Scales, Exercise.CREATOR);
         source.readTypedList(Arpeggios, Exercise.CREATOR);
     }
@@ -38,12 +38,15 @@ public class SelectableExercises_Data implements Parcelable{
             Arpeggios.add(ex);
     }
     public void removeExercise(Exercise ex){
-        if(ex.getType() == Exercise.TYPE_SCALE) {
-            Scales.remove(ex);
+        if(Scales.contains(ex) || Arpeggios.contains(ex)) {
+            if (ex.getType() == Exercise.TYPE_SCALE) {
+                Scales.remove(ex);
+            } else {
+                Arpeggios.remove(ex);
+            }
         }
-        else {
-            Arpeggios.remove(ex);
-            //Log.d("removed arpeggio: ", ex.toString());
+        else{
+            Log.d("Error", "Error in SelectableExercises_Data.removeExercise: Exercise " + ex.toString() + " is not contained within Scales or Arpeggios array");
         }
     }
 
@@ -57,9 +60,7 @@ public class SelectableExercises_Data implements Parcelable{
 
     public JSONObject toJSON(String presetName){
         JSONObject exercises = new JSONObject();
-
         //TODO don't use hardcoded strings
-
         try {
             exercises.put("preset_name", presetName);
             exercises.put("scales", exerciseListToJson(Scales));
@@ -96,7 +97,6 @@ public class SelectableExercises_Data implements Parcelable{
         for(JSONObject ex : tonalityToExerciseMap.values()){
             exercises.put(ex);
         }
-
         return exercises;
     }
 
@@ -112,20 +112,14 @@ public class SelectableExercises_Data implements Parcelable{
     }
 
     public static final Creator<SelectableExercises_Data> CREATOR = new Creator<SelectableExercises_Data>(){
-
-
         @Override
         public SelectableExercises_Data createFromParcel(Parcel source) {
             return new SelectableExercises_Data(source);
         }
-
         @Override
         public SelectableExercises_Data[] newArray(int size) {
             return new SelectableExercises_Data[size];
         }
     };
-
-
-
 
 }

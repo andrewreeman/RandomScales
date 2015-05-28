@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.widget.EditText;
 
 /**
@@ -30,12 +31,17 @@ public class InputPresetNameDialogFragment extends DialogFragment implements Dia
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if(which == Dialog.BUTTON_POSITIVE) {
-            m_newPreset = m_editText.getText().toString();
-            if (m_newPreset.isEmpty()) return;
-            Presets activity = (Presets) getActivity();
-            activity.inputPresetNameFinished(m_newPreset, false);
+    public void onClick(DialogInterface dialog, int which){
+        try {
+            if (which == Dialog.BUTTON_POSITIVE) {
+                m_newPreset = m_editText.getText().toString();
+                if (m_newPreset.isEmpty()) return;
+                Presets activity = (Presets) getActivity();
+                activity.inputPresetNameFinished(m_newPreset, false);
+            }
+        }
+        catch(AssertionError e){
+            Log.d("Error","InputPresetNameDialogFragment.onClick " + e.getMessage());
         }
     }
 

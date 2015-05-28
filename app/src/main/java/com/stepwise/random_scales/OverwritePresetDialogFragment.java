@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 /**
@@ -12,8 +13,12 @@ import android.widget.EditText;
  */
 public class OverwritePresetDialogFragment extends DialogFragment implements Dialog.OnClickListener{
     private String m_newPreset;
-    //TODO check for is empty here
-    public void setNewPresetName(String newPreset){ m_newPreset = newPreset; }
+
+    public void setNewPresetName(String newPreset) throws AssertionError{
+        if(BuildConfig.DEBUG && newPreset.isEmpty())
+            throw new AssertionError("Error in OverwritePresetDialogFragment.setNewPresetName: m_newPreset cannot be empty");
+        m_newPreset = newPreset;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceBundle){
@@ -28,13 +33,17 @@ public class OverwritePresetDialogFragment extends DialogFragment implements Dia
     }
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if(which == Dialog.BUTTON_POSITIVE) {
-            //TODO greater use of assertions
-            if (BuildConfig.DEBUG && m_newPreset.isEmpty()) {
-                throw new AssertionError("Error: OverWritePresetDialogFragment.m_newPreset cannot be empty.");
+        try {
+            if (which == Dialog.BUTTON_POSITIVE) {
+                if (BuildConfig.DEBUG && m_newPreset.isEmpty()) {
+                    throw new AssertionError("Error: OverWritePresetDialogFragment.m_newPreset cannot be empty.");
+                }
+                Presets activity = (Presets) getActivity();
+                activity.inputPresetNameFinished(m_newPreset, true);
             }
-            Presets activity = (Presets) getActivity();
-            activity.inputPresetNameFinished(m_newPreset, true);
+        }
+        catch(AssertionError e){
+            Log.d("Error", "OverwritePresetDialogFragment.onClick" + e.getMessage());
         }
     }
 

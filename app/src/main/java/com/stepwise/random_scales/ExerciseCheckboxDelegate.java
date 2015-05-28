@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,61 +23,20 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
     SelectableExercises_Data m_selectableExerciseData;
 
     public ExerciseCheckboxDelegate(){
-        m_checkboxExerciseMap = new HashMap<CheckBox, Exercise>();
-        m_exerciseCheckBoxMap = new HashMap<Exercise, CheckBox>();
+        m_checkboxExerciseMap = new HashMap<>();
+        m_exerciseCheckBoxMap = new HashMap<>();
     }
-//TODO this should be part of a Preset Manager class
+
     public void setFromJSON(JSONObject obj, HashMap<String, ArrayList<Exercise>> allScales, HashMap<String, ArrayList<Exercise>> allArps){
         JSONArray scales;
         JSONArray arps;
-        JSONArray keys;
-        String name;
-        String hint;
-        Exercise ex;
-        ArrayList<Exercise> exerciseList;
-
         try{
             deselectAllCheckBoxes();
             m_selectableExerciseData.clear();
-
             scales = obj.getJSONArray("scales");
             arps = obj.getJSONArray("arps");
-
-            for(int i=0; i<scales.length(); ++i){
-                obj = (JSONObject)scales.get(i);
-                name = obj.getString("name");
-                hint = obj.getString("hint");
-                keys = obj.getJSONArray("keys");
-                exerciseList = allScales.get(name);
-
-                for(int key=0; key<keys.length(); ++key){
-                    ex = new Exercise(keys.getString(key), name, Exercise.TYPE_SCALE, hint);
-                    if(exerciseList.contains(ex)){
-                        int index = exerciseList.indexOf(ex);
-                        m_selectableExerciseData.addExercise(exerciseList.get(index));
-                    }
-
-
-                    //m_selectableExerciseData.addExercise(ex);
-                }
-            }
-
-            for(int i=0; i<arps.length(); ++i) {
-                obj = (JSONObject) arps.get(i);
-                name = obj.getString("name");
-                hint = obj.getString("hint");
-                keys = obj.getJSONArray("keys");
-                exerciseList = allArps.get(name);
-
-                for (int key = 0; key < keys.length(); ++key) {
-                    ex = new Exercise(keys.getString(key), name, Exercise.TYPE_ARPEGGIO, hint);
-                    if(exerciseList.contains(ex)){
-                        int index = exerciseList.indexOf(ex);
-                        m_selectableExerciseData.addExercise(exerciseList.get(index));
-                    }
-                }
-
-            }
+            setExerciseFromJSONArray(scales, allScales, Exercise.TYPE_SCALE);
+            setExerciseFromJSONArray(arps, allArps, Exercise.TYPE_ARPEGGIO);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -87,6 +47,7 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         m_exerciseCheckBoxMap.put(ex, check);
         check.setOnClickListener(this);
     }
+
     public void setModel(SelectableExercises_Data model){
         m_selectableExerciseData = model;
     }
@@ -101,13 +62,6 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         update(arps);
     }
 
-    private void update(ArrayList<Exercise> exerciseList){
-        for(Exercise ex : exerciseList){
-            CheckBox checkBox = m_exerciseCheckBoxMap.get(ex);
-            checkBox.setChecked(true);
-        }
-    }
-
     public void selectAllCheckBoxes(){
         for(Map.Entry<CheckBox, Exercise> entry : m_checkboxExerciseMap.entrySet()){
             if( !(entry.getKey().isChecked())) {
@@ -115,8 +69,6 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
                 m_selectableExerciseData.addExercise(entry.getValue());
             }
         }
-        //Log.d("Arpeggio array size: ", String.valueOf( m_selectableExerciseData.getArpeggios().size() ));
-        //Log.d("Scale array size: ", String.valueOf(m_selectableExerciseData.getScales().size() ));
     }
 
     public void deselectAllCheckBoxes(){
@@ -124,27 +76,34 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
             if(entry.getKey().isChecked()) {
                 entry.getKey().setChecked(false);
                 m_selectableExerciseData.removeExercise(entry.getValue());
-                //Log.d("Clearing: ", entry.getValue().toString());
-            }
+             }
         }
-     //   Log.d("Arpeggio array size: ", String.valueOf( m_selectableExerciseData.getArpeggios().size() ));
-       // Log.d("Scale array size: ", String.valueOf(m_selectableExerciseData.getScales().size() ));
     }
+
     public void clear(){
         m_checkboxExerciseMap.clear();
         m_exerciseCheckBoxMap.clear();
     }
-
+/*
     public Exercise getExercise(CheckBox check){
-        return m_checkboxExerciseMap.get(check);
+        if(m_checkboxExerciseMap.containsKey(check)) {
+            return m_checkboxExerciseMap.get(check);
+        }
+        else{
+            throw new AssertionError("Error in ExerciseCheckboxDelegate.getExercise: Checkbox " + check.toString() + " is not contained within m_checkboxExerciseMap");
+        }
     }
+
 
     public CheckBox getCheckBox(Exercise ex){
         return m_exerciseCheckBoxMap.get(ex);
     }
+*/
 
     @Override
     public void onClick(View v){
+        if(!(v instanceof CheckBox))
+            throw new ClassCastException("Error in ExerciseCheckboxDelegate.onClick: v " + v.toString() + "is not an instance of CheckBox");
         CheckBox checkBox = (CheckBox)v;
         Exercise ex = m_checkboxExerciseMap.get(checkBox);
         if(checkBox.isChecked())
@@ -153,11 +112,47 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
             m_selectableExerciseData.removeExercise(ex);
     }
 
-    public void setCheckBox(Exercise ex, boolean isChecked){
-        CheckBox check = m_exerciseCheckBoxMap.get(ex);
-        if( check != null)
-            check.setChecked(isChecked);
+    private void setExerciseFromJSONArray(JSONArray array, HashMap<String, ArrayList<Exercise>> allExercisesOfType, int type) throws JSONException{
+        JSONObject obj;
+        String name;
+        String hint;
+        JSONArray keys;
+        ArrayList<Exercise> exerciseList;
+        Exercise ex;
+
+        if(BuildConfig.DEBUG && (type != Exercise.TYPE_ARPEGGIO && type != Exercise.TYPE_SCALE)){
+            String errorMessage = "Error in ExerciseCheckboxDelegate.setExerciseFromJSONArray: ";
+            errorMessage += "int type (" + String.valueOf(type) + ") ";
+            errorMessage += " does not match Exercise.TYPE_ARPEGGIO (" + String.valueOf(Exercise.TYPE_ARPEGGIO) + ") or Exercise.TYPE_SCALE (" + String.valueOf(Exercise.TYPE_SCALE) + ")";
+            throw new AssertionError(errorMessage);
+        }
+
+        for(int i=0; i<array.length(); ++i){
+            obj = (JSONObject)array.get(i);
+            name = obj.getString("name");
+            hint = obj.getString("hint");
+            keys = obj.getJSONArray("keys");
+
+            if(!allExercisesOfType.containsKey(name))
+                throw new AssertionError("Error in ExerciseCheckboxDelegate.setExerciseFromJSONArray: " + name + " is not included in allExercisesOfType");
+            exerciseList = allExercisesOfType.get(name);
+
+            for(int key=0; key<keys.length(); ++key){
+                //If exercise exists within exerciseList then add the one in exercise list. Making use of currently existing exercises.
+                ex = new Exercise(keys.getString(key), name, type, hint);
+                if(exerciseList.contains(ex)){
+                    int index = exerciseList.indexOf(ex);
+                    m_selectableExerciseData.addExercise(exerciseList.get(index));
+                }
+
+            }
+        }
     }
 
+    private void update(ArrayList<Exercise> exerciseList){
+        for(Exercise ex : exerciseList){
+            CheckBox checkBox = m_exerciseCheckBoxMap.get(ex);
+            checkBox.setChecked(true);
+        }
+    }
 }
-

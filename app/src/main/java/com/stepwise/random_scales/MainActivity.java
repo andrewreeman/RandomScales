@@ -5,6 +5,7 @@ import android.content.res.Resources;
 //import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE__GET_PRESETS = 0;
+
     SelectableExercises_Data m_selectableExercises;
 
     @Override
@@ -24,6 +26,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         m_selectableExercises = new SelectableExercises_Data();
+        //TODO onCreate if savedInstance....and also remember last preset
         setSelectableExercise_Data("Default");
     }
 
@@ -74,10 +77,8 @@ public class MainActivity extends Activity {
     }
 
 
-
+//TODO select from preset or temp preset
     public void setSelectableExercise_Data(String preset){
-        //TODO select exercise from xml or json (JSON JSON!!!) file. atm just selects all exercises
-
 
         String[] notes = getResources().getStringArray(R.array.Notes);
         String[] scales = getResources().getStringArray(R.array.Scales);
@@ -94,7 +95,6 @@ public class MainActivity extends Activity {
                 m_selectableExercises.addExercise(ex);
             }
         }
-
     }
 
     public void startChangePreset(){
@@ -113,6 +113,8 @@ public class MainActivity extends Activity {
         if(requestCode == REQUEST_CODE__GET_PRESETS){
             if(resultCode == RESULT_OK)
                 m_selectableExercises = data.getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
+            else
+                Log.d("MainActivity", "MainActivity.onActivityResult result was not ok. Result was: " + String.valueOf(resultCode));
         }
     }
 

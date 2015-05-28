@@ -5,6 +5,8 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by andy on 03/04/15.
@@ -20,16 +22,34 @@ public class Exercise implements Parcelable {
     private int m_type;
 
     public Exercise(String key, String name, int type, String hint){
-        m_key = key;
+        setKey(key);
+        setType(type);
         m_exerciseName = name;
-        m_type = type;
         m_exerciseHint = hint;
+
     }
 
     public String getKey(){return m_key;}
     public String getName(){return m_exerciseName;}
     public String getHint(){return m_exerciseHint;}
     public int getType(){ return m_type; }
+
+    private void setKey(String key){
+        if(BuildConfig.DEBUG){
+            //If A to G and b# or nothing
+            Pattern pattern = Pattern.compile("[A-G][b#]?");
+            Matcher matcher = pattern.matcher(key);
+            if(!(matcher.matches()))
+                Log.d("Exercise.setKey", key + " is not a valid note");
+        }
+        m_key = key;
+    }
+
+    private void setType(int inputType){
+        if(BuildConfig.DEBUG && (inputType != Exercise.TYPE_ARPEGGIO && inputType != Exercise.TYPE_SCALE))
+            Log.d("Exercise.setType", "type is not a valid exercise type");
+        m_type = inputType;
+    }
 
 
     @Override
@@ -63,7 +83,7 @@ public class Exercise implements Parcelable {
             int type = source.readInt();
             String hint = source.readString();
 
-            return new Exercise(key,name,type,hint);
+            return new Exercise(key, name, type, hint);
         }
 
         @Override
