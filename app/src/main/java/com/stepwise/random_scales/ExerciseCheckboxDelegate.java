@@ -84,21 +84,6 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         m_checkboxExerciseMap.clear();
         m_exerciseCheckBoxMap.clear();
     }
-/*
-    public Exercise getExercise(CheckBox check){
-        if(m_checkboxExerciseMap.containsKey(check)) {
-            return m_checkboxExerciseMap.get(check);
-        }
-        else{
-            throw new AssertionError("Error in ExerciseCheckboxDelegate.getExercise: Checkbox " + check.toString() + " is not contained within m_checkboxExerciseMap");
-        }
-    }
-
-
-    public CheckBox getCheckBox(Exercise ex){
-        return m_exerciseCheckBoxMap.get(ex);
-    }
-*/
 
     @Override
     public void onClick(View v){

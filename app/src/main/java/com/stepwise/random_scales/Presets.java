@@ -43,7 +43,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
     private HashMap<String, ArrayList<Exercise>> m_allArps;
     private Boolean m_isCheckBoxTableBuilt;
     private PresetReadWriter m_presetReadWriter;
-
+//TODO organise strings in different files
     @Override
     protected void onCreate(Bundle savedInstanceState){
 

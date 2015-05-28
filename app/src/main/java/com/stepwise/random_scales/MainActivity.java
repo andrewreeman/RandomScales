@@ -18,16 +18,18 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE__GET_PRESETS = 0;
+    public static Resources resources;
 
     SelectableExercises_Data m_selectableExercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        resources = getResources();
         setContentView(R.layout.activity_main);
         m_selectableExercises = new SelectableExercises_Data();
-        //TODO onCreate if savedInstance....and also remember last preset
         setSelectableExercise_Data("Default");
+
     }
 
 
@@ -77,7 +79,6 @@ public class MainActivity extends Activity {
     }
 
 
-//TODO select from preset or temp preset
     public void setSelectableExercise_Data(String preset){
 
         String[] notes = getResources().getStringArray(R.array.Notes);

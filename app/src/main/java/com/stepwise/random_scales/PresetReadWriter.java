@@ -1,6 +1,7 @@
 package com.stepwise.random_scales;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class PresetReadWriter {
     }
     public ArrayList<String> getPresetNames() {
         ArrayList<String> presetNames = new ArrayList<>();
-
+        
         try {
             JSONArray jsonNames = m_presets.getJSONArray("presets");
             JSONObject obj;

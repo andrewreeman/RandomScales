@@ -61,6 +61,15 @@
     <string name="com.stepwise.random_scales.presetList">com.stepwise.random_scales.presetList</string>
     <string name="com.stepwise.random_scales.ClearAllButton_IsClearState">com.stepwise.rand_scales.clearOrAllButtonState</string>
     <string name="com.stepwise.random_scales.InputPresetNameDialog">com.stepwise.rand_scales.inputPresetNameDialog</string>
+    <string name="com.stepwise.random_scales.JSONKeys.preset_name">com.stepwise.random_scales.JSONKeys.preset_name</string>
+    <string name="com.stepwise.random_scales.JSONKeys.key">com.stepwise.random_scales.JSONKeys.key</string>
+    <string name="com.stepwise.random_scales.JSONKeys.type">com.stepwise.random_scales.JSONKeys.type</string>
+    <string name="com.stepwise.random_scales.JSONKeys.hint">com.stepwise.random_scales.JSONKeys.hint</string>
+    <string name="com.stepwise.random_scales.JSONKeys.name">com.stepwise.random_scales.JSONKeys.name</string>
+    <string name="com.stepwise.random_scales.JSONKeys.presets">com.stepwise.random_scales.JSONKeys.presets</string>
+    <string name="com.stepwise.random_scales.JSONKeys.scales">com.stepwise.random_scales.JSONKeys.scales</string>
+    <string name="com.stepwise.random_scales.JSONKeys.arps">com.stepwise.random_scales.JSONKeys.arps</string>
+
     <string-array name="spinnerExerciseTypes">
         <item >Scales</item>
         <item >Arpeggios</item>
