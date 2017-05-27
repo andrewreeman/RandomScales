@@ -189,11 +189,19 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
 
     public void onCheckBoxChanged(){
         Spinner spinner = (Spinner)findViewById(R.id.presets);
-        String currentItem = (String)spinner.getSelectedItem();
-        if(currentItem.contains("*")) return;
-        int itemPos = spinner.getSelectedItemPosition();
+        if(!(spinner.getAdapter() instanceof ArrayAdapter)){
+            Log.e("Presets", "Spinner not an instance of array adapter");
+            return;
+        }
+        // no way to check the type of the arrayadapter?
+        @SuppressWarnings("unchecked")
         ArrayAdapter<String> adapter = (ArrayAdapter<String>)spinner.getAdapter();
 
+        String currentItem = (String)spinner.getSelectedItem();
+        if(currentItem == null) return;
+        else if(currentItem.contains("*")) return;
+
+        int itemPos = spinner.getSelectedItemPosition();
         stripPresetsWithStars(adapter);
         adapter.insert(currentItem + "*", itemPos);
     }
