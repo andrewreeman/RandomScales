@@ -88,11 +88,11 @@ public class MainActivity extends Activity {
         m_selectableExercises.clear();
         for(String note : notes){
             for(String scale : scales){
-                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
+                Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
                 m_selectableExercises.addExercise(ex);
             }
             for(String arp : arps){
-                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
+                Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
                 m_selectableExercises.addExercise(ex);
             }
         }

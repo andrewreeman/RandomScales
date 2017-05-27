@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by andy on 19/04/15.
- */
 public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     HashMap<CheckBox, Exercise> m_checkboxExerciseMap;
@@ -36,8 +33,8 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
             m_selectableExerciseData.clear();
             scales = obj.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_scales));
             arps = obj.getJSONArray(MainActivity.resources.getString(R.string.com_stepwise_random_scales_JSONKeys_arps));
-            setExerciseFromJSONArray(scales, allScales, Exercise.TYPE_SCALE);
-            setExerciseFromJSONArray(arps, allArps, Exercise.TYPE_ARPEGGIO);
+            setExerciseFromJSONArray(scales, allScales, Exercise.ExerciseType.SCALE);
+            setExerciseFromJSONArray(arps, allArps, Exercise.ExerciseType.ARPEGGIO);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -99,20 +96,13 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
         m_checkboxChangedListener.onCheckBoxChanged();
     }
 
-    private void setExerciseFromJSONArray(JSONArray array, HashMap<String, ArrayList<Exercise>> allExercisesOfType, int type) throws JSONException{
+    private void setExerciseFromJSONArray(JSONArray array, HashMap<String, ArrayList<Exercise>> allExercisesOfType, Exercise.ExerciseType type) throws JSONException{
         JSONObject obj;
         String name;
         String hint;
         JSONArray keys;
         ArrayList<Exercise> exerciseList;
         Exercise ex;
-
-        if(BuildConfig.DEBUG && (type != Exercise.TYPE_ARPEGGIO && type != Exercise.TYPE_SCALE)){
-            String errorMessage = "Error in ExerciseCheckboxDelegate.setExerciseFromJSONArray: ";
-            errorMessage += "int type (" + String.valueOf(type) + ") ";
-            errorMessage += " does not match Exercise.TYPE_ARPEGGIO (" + String.valueOf(Exercise.TYPE_ARPEGGIO) + ") or Exercise.TYPE_SCALE (" + String.valueOf(Exercise.TYPE_SCALE) + ")";
-            throw new AssertionError(errorMessage);
-        }
 
         for(int i=0; i<array.length(); ++i){
             obj = (JSONObject)array.get(i);

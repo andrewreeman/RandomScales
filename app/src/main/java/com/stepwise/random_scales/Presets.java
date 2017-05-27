@@ -228,7 +228,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         for(String scale : scaleTypes){
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
-                Exercise ex = new Exercise(note, scale, Exercise.TYPE_SCALE, "nothing");
+                Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
                 if(selectedScales.contains(ex)){
                     int index = selectedScales.indexOf(ex);
                     ex = selectedScales.get(index);
@@ -241,7 +241,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         for(String arp : arpTypes){
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
-                Exercise ex = new Exercise(note, arp, Exercise.TYPE_ARPEGGIO, "nothing");
+                Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
                 if(selectedArps.contains(ex)){
                     int index = selectedArps.indexOf(ex);
                     ex = selectedArps.get(index);

@@ -32,21 +32,19 @@ public class SelectableExercises_Data implements Parcelable{
     }
 
     public void addExercise(Exercise ex){
-        if(ex.getType() == Exercise.TYPE_SCALE)
-            Scales.add(ex);
-        else
-            Arpeggios.add(ex);
+        switch (ex.getType()){
+            case SCALE:
+                Scales.add(ex);
+                break;
+            case ARPEGGIO:
+                Arpeggios.add(ex);
+                break;
+        }
     }
     public void removeExercise(Exercise ex){
-        if(Scales.contains(ex) || Arpeggios.contains(ex)) {
-            if (ex.getType() == Exercise.TYPE_SCALE) {
-                Scales.remove(ex);
-            } else {
-                Arpeggios.remove(ex);
-            }
-        }
-        else{
-            Log.d("Error", "Error in SelectableExercises_Data.removeExercise: Exercise " + ex.toString() + " is not contained within Scales or Arpeggios array");
+        boolean scalesContainedExercise = Scales.remove(ex);
+        if(!scalesContainedExercise) {
+            Arpeggios.remove(ex);
         }
     }
 
