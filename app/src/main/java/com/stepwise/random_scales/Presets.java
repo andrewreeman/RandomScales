@@ -47,11 +47,12 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presets);
         if (savedInstanceState != null) {
-
+            m_selectableExercises = savedInstanceState.getParcelable("test");
         }
-        else{
-            m_isCheckBoxTableBuilt = false;
+        else {
             m_selectableExercises = getIntent().getParcelableExtra(getString(R.string.com_stepwise_random_scales_presetList));
+        }
+            m_isCheckBoxTableBuilt = false;
             fillAllScalesAndArps();
 
             m_exerciseCheckBoxDelegate = new ExerciseCheckboxDelegate();
@@ -76,7 +77,12 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
                 Log.d("Presets", "IOException in Presets.onCreate: " + e.toString());
                 m_presetReadWriter = null;
             }
-        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("test", m_selectableExercises);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
