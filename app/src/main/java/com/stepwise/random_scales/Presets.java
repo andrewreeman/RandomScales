@@ -234,12 +234,16 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         for(String scale : scaleTypes){
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
-                Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
-                if(selectedScales.contains(ex)){
-                    int index = selectedScales.indexOf(ex);
-                    ex = selectedScales.get(index);
+                try {
+                    Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
+                    if (selectedScales.contains(ex)) {
+                        int index = selectedScales.indexOf(ex);
+                        ex = selectedScales.get(index);
+                    }
+                    exercises.add(ex);
+                } catch (Exercise.InvalidKeyException exception) {
+                    Log.e("Presets", exception.getMessage());
                 }
-                exercises.add(ex);
             }
             m_allScales.put(scale, exercises);
         }
@@ -247,12 +251,16 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         for(String arp : arpTypes){
             ArrayList<Exercise> exercises = new ArrayList<>();
             for(String note : notesString) {
-                Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
-                if(selectedArps.contains(ex)){
-                    int index = selectedArps.indexOf(ex);
-                    ex = selectedArps.get(index);
+                try {
+                    Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
+                    if (selectedArps.contains(ex)) {
+                        int index = selectedArps.indexOf(ex);
+                        ex = selectedArps.get(index);
+                    }
+                    exercises.add(ex);
+                } catch (Exercise.InvalidKeyException exception){
+                    Log.e("Presets", exception.getMessage());
                 }
-                exercises.add(ex);
             }
             m_allArps.put(arp, exercises);
         }

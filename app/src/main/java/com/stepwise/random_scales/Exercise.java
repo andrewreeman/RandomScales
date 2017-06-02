@@ -10,6 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Exercise implements Parcelable {
+
+    public class InvalidKeyException extends Exception {}
+
     public enum ExerciseType {
         SCALE,
         ARPEGGIO;
@@ -40,12 +43,11 @@ public class Exercise implements Parcelable {
     private String m_exerciseHint;
     private ExerciseType m_type;
 
-    public Exercise(String key, String name, ExerciseType type, String hint){
+    public Exercise(String key, String name, ExerciseType type, String hint) throws InvalidKeyException {
         setKey(key);
         m_type = type;
         m_exerciseName = name;
         m_exerciseHint = hint;
-
     }
 
     public String getKey(){return m_key;}
@@ -53,14 +55,16 @@ public class Exercise implements Parcelable {
     public String getHint(){return m_exerciseHint;}
     public ExerciseType getType(){ return m_type; }
 
-    private void setKey(String key){
-        if(BuildConfig.DEBUG){
-            //If A to G and b# or nothing
-            Pattern pattern = Pattern.compile("[A-G][b#]?");
-            Matcher matcher = pattern.matcher(key);
-            if(!(matcher.matches()))
-                Log.d("Exercise.setKey", key + " is not a valid note");
+    private void setKey(String key) throws InvalidKeyException {
+
+        //If A to G and b# or nothing
+        Pattern pattern = Pattern.compile("[a-gA-G](#|b)?");
+        Matcher matcher = pattern.matcher(key);
+        if(!(matcher.matches())) {
+            Log.d("Exercise.setKey", key + " is not a valid note");
+            throw new InvalidKeyException();
         }
+
         m_key = key;
     }
 
@@ -101,7 +105,12 @@ public class Exercise implements Parcelable {
 
             String hint = source.readString();
 
-            return new Exercise(key, name, exerciseType, hint);
+            try {
+                return new Exercise(key, name, exerciseType, hint);
+            } catch (InvalidKeyException e) {
+                Log.e("Exercise", e.getMessage());
+                return null;
+            }
         }
 
         @Override
