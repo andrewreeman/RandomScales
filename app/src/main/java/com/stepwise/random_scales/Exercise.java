@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +12,9 @@ public class Exercise implements Parcelable {
 
     public class InvalidKeyException extends Exception {}
 
+    /**
+     * The type of exercise to perform.
+     */
     public enum ExerciseType {
         SCALE,
         ARPEGGIO;
@@ -35,16 +37,22 @@ public class Exercise implements Parcelable {
         }
     }
 
-    public static final int TYPE_SCALE = 0;
-    public static final int TYPE_ARPEGGIO = 1;
+    final private String m_key;
+    final private String m_exerciseName;
+    final private String m_exerciseHint;
+    final private ExerciseType m_type;
 
-    private String m_key;
-    private String m_exerciseName;
-    private String m_exerciseHint;
-    private ExerciseType m_type;
-
+    /**
+     *
+     * @param key The key that the exercise is in. Must be a letter from a-g uppercase or lowercase and be preceded by nothing, a '#' or a 'b'
+     * @param name The name of the exercise: e.g Dorian
+     * @param type The type of exercise
+     * @param hint A hint or description on how to perform this exercise
+     * @throws InvalidKeyException This is thrown when the key is not a musical key
+     */
     public Exercise(String key, String name, ExerciseType type, String hint) throws InvalidKeyException {
-        setKey(key);
+        validateKey(key);
+        m_key = key;
         m_type = type;
         m_exerciseName = name;
         m_exerciseHint = hint;
@@ -55,21 +63,23 @@ public class Exercise implements Parcelable {
     public String getHint(){return m_exerciseHint;}
     public ExerciseType getType(){ return m_type; }
 
-    private void setKey(String key) throws InvalidKeyException {
-
-        //If A to G and b# or nothing
+    /**
+     * Checks that the key is a valid musical key
+     * @param key The key to check
+     * @throws InvalidKeyException thrown if the key is not a valid musical key
+     */
+    private void validateKey(String key) throws InvalidKeyException {
         Pattern pattern = Pattern.compile("[a-gA-G](#|b)?");
         Matcher matcher = pattern.matcher(key);
         if(!(matcher.matches())) {
-            Log.d("Exercise.setKey", key + " is not a valid note");
+            Log.d("Exercise.validateKey", key + " is not a valid note");
             throw new InvalidKeyException();
         }
-
-        m_key = key;
     }
 
     @Override
     public boolean equals(Object other){
+        if(!(other instanceof Exercise)) return false;
         Exercise otherEx = (Exercise)other;
         return this.getHint().equals(otherEx.getHint()) && this.getKey().equals(otherEx.getKey()) && this.getType() == otherEx.getType() && this.getName().equals(otherEx.getName());
     }
@@ -80,6 +90,8 @@ public class Exercise implements Parcelable {
     }
 
     // Parcelable methods
+
+    /** Nobody knows what this does... */
     @Override
     public int describeContents() {
         return 0;
@@ -117,7 +129,6 @@ public class Exercise implements Parcelable {
         public Exercise[] newArray(int size) {
             return new Exercise[size];
         }
-
 
     };
 }

@@ -44,31 +44,6 @@ public class ExcerciseTests {
                 Assert.fail("Invalid key found: " + key);
             }
         }
-
-
-
-
-        Assert.assertThat("Thing", new Matcher<String>() {
-            @Override
-            public boolean matches(Object item) {
-                return true;
-            }
-
-            @Override
-            public void describeMismatch(Object item, Description mismatchDescription) {
-
-            }
-
-            @Override
-            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-
-            }
-
-            @Override
-            public void describeTo(Description description) {
-
-            }
-        });
     }
 
     private Exercise.ExerciseType generateRandomExerciseType() {
