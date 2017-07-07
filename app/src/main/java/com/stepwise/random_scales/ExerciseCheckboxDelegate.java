@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The ExerciseCheckBoxDelegate acts as the in-memory datastore for the selected exercises.
+ */
 public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     HashMap<CheckBox, Exercise> m_checkboxExerciseMap;
