@@ -1,5 +1,6 @@
 package com.stepwise.random_scales;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The ExerciseCheckBoxDelegate acts as the in-memory datastore for the selected exercises.
+ */
 public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
     HashMap<CheckBox, Exercise> m_checkboxExerciseMap;
@@ -116,10 +120,14 @@ public class ExerciseCheckboxDelegate implements View.OnClickListener {
 
             for(int key=0; key<keys.length(); ++key){
                 //If exercise exists within exerciseList then add the one in exercise list. Making use of currently existing exercises.
-                ex = new Exercise(keys.getString(key), name, type, hint);
-                if(exerciseList.contains(ex)){
-                    int index = exerciseList.indexOf(ex);
-                    m_selectableExerciseData.addExercise(exerciseList.get(index));
+                try {
+                    ex = new Exercise(keys.getString(key), name, type, hint);
+                    if(exerciseList.contains(ex)){
+                        int index = exerciseList.indexOf(ex);
+                        m_selectableExerciseData.addExercise(exerciseList.get(index));
+                    }
+                } catch (Exercise.InvalidKeyException e) {
+                    Log.e("ExerciseCheckboxDele", e.getMessage());
                 }
 
             }

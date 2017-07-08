@@ -88,12 +88,20 @@ public class MainActivity extends Activity {
         m_selectableExercises.clear();
         for(String note : notes){
             for(String scale : scales){
-                Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
-                m_selectableExercises.addExercise(ex);
+                try {
+                    Exercise ex = new Exercise(note, scale, Exercise.ExerciseType.SCALE, "nothing");
+                    m_selectableExercises.addExercise(ex);
+                } catch (Exercise.InvalidKeyException e){
+                    Log.e("MainActivity", e.getMessage());
+                }
             }
             for(String arp : arps){
-                Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
-                m_selectableExercises.addExercise(ex);
+                try {
+                    Exercise ex = new Exercise(note, arp, Exercise.ExerciseType.ARPEGGIO, "nothing");
+                    m_selectableExercises.addExercise(ex);
+                } catch (Exercise.InvalidKeyException e) {
+                    Log.e("MainActivity", e.getMessage());
+                }
             }
         }
     }
