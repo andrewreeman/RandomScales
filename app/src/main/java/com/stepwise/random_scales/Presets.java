@@ -63,7 +63,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             spinner.setOnItemSelectedListener(this);
             Button toggleClear = (Button) findViewById(R.id.clearChecks);
             toggleClear.setTag(CHECKALL_CHECKBOXES);
-            m_selectedType = Exercise.TYPE_SCALE;
+            m_selectedType = Exercise.ExerciseType.SCALE.toInt();
 
             try{
                 m_presetReadWriter = new PresetReadWriter(this, getString(R.string.com_stepwise_random_scales_PresetFile));
@@ -97,11 +97,11 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
             if (pos == 0) {
                 buildTable(m_allScales);
                 m_exerciseCheckBoxDelegate.updateScales();
-                m_selectedType = Exercise.TYPE_SCALE;
+                m_selectedType = Exercise.ExerciseType.SCALE.toInt();
             } else {
                 buildTable(m_allArps);
                 m_exerciseCheckBoxDelegate.updateArps();
-                m_selectedType = Exercise.TYPE_ARPEGGIO;
+                m_selectedType = Exercise.ExerciseType.ARPEGGIO.toInt();
             }
             clearCheckToggle.setTag(CLEAR_CHECKBOXES);
             clearCheckToggle.setText("Clear");
@@ -112,7 +112,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
                 String presetName = (String)parent.getSelectedItem();
                 m_exerciseCheckBoxDelegate.setFromJSON(m_presetReadWriter.getPreset(presetName), m_allScales, m_allArps);
                 if (m_isCheckBoxTableBuilt) {
-                    if (m_selectedType == Exercise.TYPE_SCALE) {
+                    if (m_selectedType == Exercise.ExerciseType.SCALE.toInt()) {
                         m_exerciseCheckBoxDelegate.updateScales();
                     } else {
                         m_exerciseCheckBoxDelegate.updateArps();
@@ -137,7 +137,7 @@ public class Presets extends Activity implements AdapterView.OnItemSelectedListe
         switch(id) {
             case android.R.id.home:
             case R.id.home:
-            case R.id.homeAsUp:
+            //case R.id.homeAsUp:
             case R.id.up:
                 onBackPressed();
                 return true;
